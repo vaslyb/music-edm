@@ -188,6 +188,6 @@ if __name__ == "__main__":
         df = pd.DataFrame(zippedList, columns = ['Index', 'Name' , 'ID', 'Artist', "Artist's ID", 'Genre',  'Preview', 'Album', "Album's ID", "Release Date", "Duration", "Popularity"], index=TracksIndexes) 
         
         df.to_csv('./tracks.csv',index=False)
-        send_email("Script Completed "+ args.save_path, "Your Python script has finished successfully.")
+        send_email("Script Completed ", "Your Python script has finished successfully.")
     except Exception as e:
         send_email("Script Error", f"An error occurred in your Python script:\n\n{str(e)}")
