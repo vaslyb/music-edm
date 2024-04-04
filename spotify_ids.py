@@ -13,6 +13,83 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 
+subgenres_to_genres = {
+    "deep tech house": "house",
+    "deep progressive house": "house",
+    "dark progressive house": "house",
+    "funky tech house": "house",
+    "deep deep tech house": "house",
+    "tech house": "house",
+    "deep deep house": "house",
+    "jackin’ house": "house",
+    "funky house": "house",
+    "organic house": "house",
+    "minimal tech house": "house",
+    "classic house": "house",
+    "tribal house": "house",
+    "deep euro house": "house",
+    "soulful house": "house",
+    "deep house": "house",
+    "bouncy house": "house",
+    "deep groove house": "house",
+    "diva house": "house",
+    "bass house": "house",
+    "fidget house": "house",
+    "float house": "house",
+    "classic progressive house": "house",
+    "progressive house": "house",
+    "slap house": "house",
+    "deep tropical house": "house",
+    "tropical house": "house",
+    "stutter house": "house",
+    "future house": "house",
+    "minimal dubstep": "dubstep",
+    "deep dubstep": "dubstep",
+    "deep filthstep": "dubstep",
+    "classic dubstep": "dubstep",
+    "filthstep": "dubstep",
+    "gaming dubstep": "dubstep",
+    "deathstep": "dubstep",
+    "riddim dubstep": "dubstep",
+    "tearout": "dubstep",
+    "brostep": "dubstep",
+    "goa trance": "trance",
+    "goa psytrance": "trance",
+    "progressive psytrance": "trance",
+    "psychedelic trance": "trance",
+    "dark psytrance": "trance",
+    "tech trance": "trance",
+    "cosmic uplifting trance": "trance",
+    "bubble trance": "trance",
+    "deep psytrance": "trance",
+    "deep progressive trance": "trance",
+    "progressive uplifting trance": "trance",
+    "deep uplifting trance": "trance",
+    "acid trance": "trance",
+    "progressive trance": "trance",
+    "old school hard trance": "trance",
+    "forest psy": "trance",
+    "deep full on": "trance",
+    "full on": "trance",
+    "deep minimal techno": "techno",
+    "dark techno": "techno",
+    "raw techno": "techno",
+    "dark minimal techno": "techno",
+    "deep techno": "techno",
+    "minimal techno": "techno",
+    "acid techno": "techno",
+    "industrial techno": "techno",
+    "modular techno": "techno",
+    "bleep techno": "techno",
+    "deep liquid bass": "drum and bass",
+    "jump up": "drum and bass",
+    "neuro step": "drum and bass",
+    "darkstep": "drum and bass",
+    "neurofunk": "drum and bass"
+}
+
+genres = ['house', 'dubstep', 'trance', 'techno', 'drum and bass']
+
 # Load credentials from config file
 with open('config.json') as f:
     config = json.load(f)
@@ -63,15 +140,23 @@ def request_valid_song(access_token, genre=None):
     break_outer_loop = False
     for _ in range(51):
         try:
+            excluded_genres = [gen for gen in genres if gen != subgenres_to_genres[genre]]
+            # Construct the query string to include one genre and exclude some genres
+            included_genre_query = "genre:\"{}\"".format(genre.replace(" ", "%20"))
+            excluded_genres_query = " ".join(["-genre:\"{}\"".format(gen.replace(" ", "%20")) for gen in excluded_genres])
+            genre_query = "{} {}".format(included_genre_query, excluded_genres_query)
+
+            # Make the request to Spotify API with the modified query
             song_request = requests.get(
                 '{}/search?q={}{}&type=track&offset={}'.format(
                     SPOTIFY_API_URL,
                     wildcard,
-                    "%20genre:%22{}%22".format(genre.replace(" ", "%20")),
+                    genre_query,
                     random.randint(0, 200)
                 ),
-                headers = authorization_header
+                headers=authorization_header
             )
+            
             songs_info = json.loads(song_request.text)['tracks']['items']
             for song_info in songs_info:
                 id = song_info['id']
@@ -156,11 +241,11 @@ if __name__ == "__main__":
 
         consecutive_none_count = 0
 
-        while consecutive_none_count < len(valid_genres):
+        for number_of_songs in range(10000):
             consecutive_none_count = 0
             for selected_genre in valid_genres:
                 song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre)
-                if id is not None:
+                if id is not None and preview_url is not None:
                     TracksIds.append(id)
                     TracksName.append(song)
                     TracksArtist.append(artist)
@@ -174,6 +259,7 @@ if __name__ == "__main__":
                     TracksPopularity.append(popularity)
                     TracksIndexes.append(p)  
                     p += 1
+                    print(p,id)
                 else:
                     valid_genres.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results

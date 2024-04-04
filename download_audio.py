@@ -13,9 +13,11 @@ if __name__ == "__main__":
         # Extract the 'preview_url' and 'ID' columns
         preview_urls = df["Preview"].values.tolist()
         IDs = df["ID"].values.tolist()
-
+        Genres = df["Main Genre"].values.tolist()
+    
         # Download audio files
-        for preview_url, ID in zip(preview_urls, IDs):
-            os.system('wget -c ' + preview_url + ' -O ' + "./audio/" + str(ID) + '.mp3')
+        for preview_url, ID, Genre in zip(preview_urls, IDs, Genres):
+            Genre = Genre.replace(" ", "_")
+            os.system('wget -c ' + preview_url + ' -O ' + "./audio/" + str(Genre) + '/' + str(ID) + '.mp3')
     except Exception as e:
         send_email("Script Error", f"An error occurred in your Python script:\n\n{str(e)}")
