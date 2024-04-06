@@ -6,6 +6,7 @@ input_dir = 'audio/'
 
 # Path to the directory where you want to save output files
 output_dir = 'features/'
+os.makedirs(output_dir, exist_ok=True)
 
 # Path to the executable file
 exe_file = './streaming_extractor_music'
