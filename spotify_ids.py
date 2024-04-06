@@ -141,6 +141,7 @@ def request_valid_song(access_token, genre=None):
     for _ in range(51):
         try:
             excluded_genres = [gen for gen in genres if gen != subgenres_to_genres[genre]]
+            print(excluded_genres)
             # Construct the query string to include one genre and exclude some genres
             included_genre_query = "genre:\"{}\"".format(genre.replace(" ", "%20"))
             excluded_genres_query = " ".join(["-genre:\"{}\"".format(gen.replace(" ", "%20")) for gen in excluded_genres])
@@ -259,7 +260,6 @@ if __name__ == "__main__":
                     TracksPopularity.append(popularity)
                     TracksIndexes.append(p)  
                     p += 1
-                    print(p,id)
                 else:
                     valid_genres.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results
