@@ -26,7 +26,7 @@ for root, dirs, files in os.walk(input_dir):
         os.makedirs(output_subdir, exist_ok=True)
         
         # Construct the output file path with the same name as the input file
-        output_path = os.path.join(output_subdir, file)
+        output_path = os.path.join(output_subdir, file.split('.')[0] + '.json')
         
         # Run the executable file with the input and output parameters
         subprocess.run([exe_file, input_path, output_path])
