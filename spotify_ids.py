@@ -1,17 +1,16 @@
-import random
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
 import pickle
 import base64
 import json
-import random
 import requests
 import sys
 import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
+import urllib.parse
 
 subgenres_to_genres = {
     "deep tech house": "house",
@@ -123,47 +122,76 @@ def get_token():
     access_token = json.loads(token_request.text)["access_token"]
     return access_token
 
-def request_valid_song(access_token, genre=None):
+def request_valid_song(access_token, genre=None, offset=0):
 
-    # Wildcards for random search
-    random_wildcards = ['%25a%25', 'a%25', '%25a',
-                        '%25e%25', 'e%25', '%25e',
-                        '%25i%25', 'i%25', '%25i',
-                        '%25o%25', 'o%25', '%25o',
-                        '%25u%25', 'u%25', '%25u']
-    wildcard = random.choice(random_wildcards)
     # Make a request for the Search API with pattern and random index
     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
     
-    # Cap the max number of requests until getting RICK ASTLEYED
     song = None
     break_outer_loop = False
-    for _ in range(51):
+    for _ in range(20):
         try:
             excluded_genres = [gen for gen in genres if gen != subgenres_to_genres[genre]]
-            print(excluded_genres)
             # Construct the query string to include one genre and exclude some genres
-            included_genre_query = "genre:\"{}\"".format(genre.replace(" ", "%20"))
-            excluded_genres_query = " ".join(["-genre:\"{}\"".format(gen.replace(" ", "%20")) for gen in excluded_genres])
-            genre_query = "{} {}".format(included_genre_query, excluded_genres_query)
-
-            # Make the request to Spotify API with the modified query
-            song_request = requests.get(
-                '{}/search?q={}{}&type=track&offset={}'.format(
-                    SPOTIFY_API_URL,
-                    wildcard,
-                    genre_query,
-                    random.randint(0, 200)
-                ),
-                headers=authorization_header
-            )
+            included_genre_query = "genre:\"{}\"".format(genre)
             
+            # If you want to add exclude criteria
+            #excluded_genres_query = "".join([" NOT genre:\"{}\"".format(gen) for gen in excluded_genres])
+            #genre_query = "{}{}".format(included_genre_query, excluded_genres_query)
+            
+            # Make the request to Spotify API with the query
+            genre_query = urllib.parse.quote_plus(included_genre_query)
+            song_request = requests.get(
+                        '{}/search?q={}&type=track&offset={}'.format(
+                            SPOTIFY_API_URL,
+                            genre_query,
+                            offset
+                        ),
+                        headers=authorization_header
+                        )
             songs_info = json.loads(song_request.text)['tracks']['items']
+            
             for song_info in songs_info:
                 id = song_info['id']
                 if id in TracksIds:
                     continue
                 else:
+                    genres_track = list()
+                    # Search for album genre
+                    album_id = song_info['album']['id']
+                    genre_request = requests.get(
+                        '{}/albums/{}'.format(
+                            SPOTIFY_API_URL,
+                            album_id
+                        ),
+                        headers=authorization_header
+                    )
+                    album_genre = json.loads(genre_request.text)['genres']
+                    genres_track.extend(album_genre)
+                    # Search for artists genre
+                    for artist in song_info['artists']:
+                        artist_id = artist['id']
+                        genre_request = requests.get(
+                            '{}/artists?ids={}'.format(
+                                SPOTIFY_API_URL,
+                                artist_id
+                            ),
+                            headers=authorization_header
+                        )
+                        artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
+                        genres_track.extend(artist_genre)
+                    # Check if an excluded genre is in the genres of the track 
+                    break_outer_loop_2 = False    
+                    for genre_track in genres_track:
+                        for exculded_genre in excluded_genres:
+                            if(exculded_genre in genre_track):
+                                break_outer_loop_2 = True
+                                break
+                        if break_outer_loop_2:
+                            break
+                    if break_outer_loop_2:
+                        continue
+                    
                     artist = song_info['artists'][0]['name']
                     artist_id = song_info['artists'][0]['id']
                     album = song_info['album']['name']
@@ -241,12 +269,15 @@ if __name__ == "__main__":
             sys.exit(1)
 
         consecutive_none_count = 0
-
-        for number_of_songs in range(10000):
+        offset = 0
+        count = 0
+        while(count < 100000):
             consecutive_none_count = 0
+            if(count%20==0):
+                offset = offset + 20
             for selected_genre in valid_genres:
-                song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre)
-                if id is not None and preview_url is not None:
+                song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=offset)
+                if id is not None and preview_url is not None and id not in TracksIds:
                     TracksIds.append(id)
                     TracksName.append(song)
                     TracksArtist.append(artist)
@@ -260,9 +291,13 @@ if __name__ == "__main__":
                     TracksPopularity.append(popularity)
                     TracksIndexes.append(p)  
                     p += 1
+                    print("Found {} song: {} by {} with id: {} for genre: {}".format(p,song, artist, id, selected_genre))
                 else:
                     valid_genres.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results
+            if(consecutive_none_count == len(valid_genres)):
+                break
+            count = count + 1
 
         with open('tracks-ids.pkl', 'wb') as output_file:
             pickle.dump(TracksIds, output_file)
