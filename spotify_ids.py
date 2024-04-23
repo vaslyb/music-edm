@@ -5,12 +5,11 @@ import pickle
 import base64
 import json
 import requests
-import sys
-import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import urllib.parse
+import time
 
 subgenres_to_genres = {
     "deep tech house": "house",
@@ -84,10 +83,32 @@ subgenres_to_genres = {
     "jump up": "drum and bass",
     "neuro step": "drum and bass",
     "darkstep": "drum and bass",
-    "neurofunk": "drum and bass"
+    "neurofunk": "drum and bass",
+    "dark psytrance": "trance",
+    "deep darkpsy": "trance",
+    "german dark minimal techno": "techno",
+    "dubstep": "dubstep",
+    'minimal dub': 'techno',
 }
 
-genres = ['house', 'dubstep', 'trance', 'techno', 'drum and bass']
+genres = ['house', 'dubstep', 'trance', 'techno','drum and bass']
+
+house_genres = ['progressive house','classic progressive house','deep progressive house','dark progressive house']
+trance_genres = ['forest psy','goa trance', 'goa psytrance','deep darkpsy','dark psytrance']
+techno_genres = ['dark techno','dark minimal techno','german dark minimal techno','minimal dub']
+dubstep_genres = ['dubstep','deep dubstep','filthstep','brostep']
+subgenres = house_genres + trance_genres + techno_genres + dubstep_genres 
+subgenres_original = subgenres
+
+# Open genres file
+# try:
+#        genre_file = 'genres.json'
+#     with open(genre_file, 'r') as infile:
+#         subgenres = json.load(infile)
+#         subgenres_original = subgenres
+# except FileNotFoundError:
+#     print("Couldn't find genres file!")
+#     sys.exit(1)
 
 # Load credentials from config file
 with open('config.json') as f:
@@ -128,14 +149,16 @@ def request_valid_song(access_token, genre=None, offset=0):
     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
     
     song = None
-    break_outer_loop = False
-    for _ in range(20):
+    for _ in range(2):
         try:
             excluded_genres = [gen for gen in genres if gen != subgenres_to_genres[genre]]
+
+            excluded_subgenres = [gen for gen in subgenres if subgenres_to_genres[gen] != subgenres_to_genres[genre]]
+            excluded = excluded_genres + excluded_subgenres
             # Construct the query string to include one genre and exclude some genres
             included_genre_query = "genre:\"{}\"".format(genre)
             
-            # If you want to add exclude criteria
+            # If you want to add exclude criteria in query
             #excluded_genres_query = "".join([" NOT genre:\"{}\"".format(gen) for gen in excluded_genres])
             #genre_query = "{}{}".format(included_genre_query, excluded_genres_query)
             
@@ -149,6 +172,7 @@ def request_valid_song(access_token, genre=None, offset=0):
                         ),
                         headers=authorization_header
                         )
+            time.sleep(2)
             songs_info = json.loads(song_request.text)['tracks']['items']
             
             for song_info in songs_info:
@@ -166,6 +190,8 @@ def request_valid_song(access_token, genre=None, offset=0):
                         ),
                         headers=authorization_header
                     )
+
+                    time.sleep(2)
                     album_genre = json.loads(genre_request.text)['genres']
                     genres_track.extend(album_genre)
                     # Search for artists genre
@@ -178,12 +204,14 @@ def request_valid_song(access_token, genre=None, offset=0):
                             ),
                             headers=authorization_header
                         )
+                        
+                        time.sleep(2)
                         artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
                         genres_track.extend(artist_genre)
                     # Check if an excluded genre is in the genres of the track 
                     break_outer_loop_2 = False    
                     for genre_track in genres_track:
-                        for exculded_genre in excluded_genres:
+                        for exculded_genre in excluded:
                             if(exculded_genre in genre_track):
                                 break_outer_loop_2 = True
                                 break
@@ -201,15 +229,15 @@ def request_valid_song(access_token, genre=None, offset=0):
                     release_date = song_info['album']['release_date'] 
                     duration = song_info['duration_ms']/1000
                     preview_url = song_info['preview_url']
-                    break_outer_loop = True
                     break
-            if break_outer_loop:
-                break
-        except IndexError:
-            continue
-        except KeyError:
-            continue
-
+        except IndexError as e:
+            print(e)
+        except KeyError as e:
+            print(e)
+        except json.JSONDecodeError:
+            print(genre_request.text)
+            time.sleep(2)
+        
     if song is None:
         artist = None
         song = None
@@ -221,9 +249,7 @@ def request_valid_song(access_token, genre=None, offset=0):
         release_date = None
         duration = None
         popularity = None
-        
-        print("Did not find a song for genre: {}".format(genre))
-      
+              
     return song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity
 
 if __name__ == "__main__":
@@ -240,7 +266,6 @@ if __name__ == "__main__":
         SPOTIFY_API_BASE_URL = "https://api.spotify.com"
         API_VERSION = "v1"
         SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
-        genre_file = 'genres.json'
 
         TracksIds = []
         TracksIndexes = []
@@ -254,28 +279,21 @@ if __name__ == "__main__":
         TracksName = []
         TracksGenre = []
         TracksPreview = []  
-
         p = 0
 
         # Get a Spotify API token
         access_token = get_token()  
-
-        # Open genres file
-        try:
-            with open(genre_file, 'r') as infile:
-                valid_genres = json.load(infile)
-        except FileNotFoundError:
-            print("Couldn't find genres file!")
-            sys.exit(1)
-
+        
         consecutive_none_count = 0
         offset = 0
         count = 0
-        while(count < 100000):
-            consecutive_none_count = 0
+        number_of_genres = len(subgenres)
+        consecutive_none_count = 0
+
+        while(count < 1):
             if(count%20==0):
                 offset = offset + 20
-            for selected_genre in valid_genres:
+            for selected_genre in subgenres:
                 song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=offset)
                 if id is not None and preview_url is not None and id not in TracksIds:
                     TracksIds.append(id)
@@ -291,11 +309,12 @@ if __name__ == "__main__":
                     TracksPopularity.append(popularity)
                     TracksIndexes.append(p)  
                     p += 1
-                    print("Found {} song: {} by {} with id: {} for genre: {}".format(p,song, artist, id, selected_genre))
+                    print("{} Found a song: {} by {} with id: {} for genre: {}".format(p,song, artist, id, selected_genre))
                 else:
-                    valid_genres.remove(selected_genre)  # Remove genre from list
+                    print("Did not find a song for genre: {}".format(selected_genre))
+                    subgenres.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results
-            if(consecutive_none_count == len(valid_genres)):
+            if(consecutive_none_count == number_of_genres):
                 break
             count = count + 1
 
