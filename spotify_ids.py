@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import urllib.parse
 import time
+import os
 
 subgenres_to_genres = {
     "deep tech house": "house",
@@ -289,7 +290,7 @@ if __name__ == "__main__":
         number_of_genres = len(subgenres)
         consecutive_none_count = 0
 
-        while(count < 1):
+        while(count < 10):
             if(count%20==0):
                 offset = offset + 20
             for selected_genre in subgenres:
@@ -316,17 +317,21 @@ if __name__ == "__main__":
             if(consecutive_none_count == number_of_genres):
                 break
             count = count + 1
+        filename = "results.txt"
 
-        with open('tracks-ids.pkl', 'wb') as output_file:
+        if not os.path.exists(filename):
+            with open(filename, 'w') as file:
+                file.write("This is a new file created!\n")
+        with open(f'{filename}/tracks-ids.pkl', 'wb') as output_file:
             pickle.dump(TracksIds, output_file)
-        with open('tracks-indexes.pkl', 'wb') as output_file:
+        with open(f'{filename}/tracks-indexes.pkl', 'wb') as output_file:
             pickle.dump(TracksIndexes, output_file)
 
         zippedList =  list(zip(TracksIndexes, TracksName, TracksIds, TracksArtist, TracksArtistId, TracksGenre, TracksPreview, TracksAlbum, TracksAlbumId, TracksReleaseDate, TracksDuration, TracksPopularity))
 
         df = pd.DataFrame(zippedList, columns = ['Index', 'Name' , 'ID', 'Artist', "Artist's ID", 'Genre',  'Preview', 'Album', "Album's ID", "Release Date", "Duration", "Popularity"], index=TracksIndexes) 
         
-        df.to_csv('./tracks.csv',index=False)
+        df.to_csv(f'{filename}/tracks.csv',index=False)
         send_email("Script Completed ", "Your Python script has finished successfully.")
     except Exception as e:
         send_email("Script Error", f"An error occurred in your Python script:\n\n{str(e)}")
