@@ -283,7 +283,6 @@ if __name__ == "__main__":
 
         # Get a Spotify API token
         access_token = get_token()  
-        
         consecutive_none_count = 0
         offset = 0
         count = 0
