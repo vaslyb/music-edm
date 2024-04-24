@@ -285,16 +285,13 @@ if __name__ == "__main__":
         # Get a Spotify API token
         access_token = get_token()  
         consecutive_none_count = 0
-        offset = 0
         count = 0
         number_of_genres = len(subgenres)
         consecutive_none_count = 0
 
         while(count < 10):
-            if(count%20==0):
-                offset = offset + 20
             for selected_genre in subgenres:
-                song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=offset)
+                song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=count)
                 if id is not None and preview_url is not None and id not in TracksIds:
                     TracksIds.append(id)
                     TracksName.append(song)
