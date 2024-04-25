@@ -11,6 +11,34 @@ import smtplib
 import urllib.parse
 import time
 import os
+import nltk
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+import Levenshtein
+
+# Download NLTK resources (if not already downloaded)
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Initialize lemmatizer and stemmer
+lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
+
+def preprocess_title(title):
+    # Tokenize the title into words
+    words = nltk.word_tokenize(title)
+    # Lemmatize and stem each word
+    processed_words = [stemmer.stem(lemmatizer.lemmatize(word.lower())) for word in words]
+    # Join processed words back into a single string
+    processed_title = ' '.join(processed_words)
+    return processed_title
+
+def is_approximately_same(title1, title2, threshold=0.8):
+    processed_title1 = preprocess_title(title1)
+    processed_title2 = preprocess_title(title2)
+    distance = Levenshtein.distance(processed_title1, processed_title2)
+    max_length = max(len(processed_title1), len(processed_title2))
+    similarity = 1 - (distance / max_length)
+    return similarity >= threshold
 
 subgenres_to_genres = {
     "deep tech house": "house",
@@ -173,7 +201,6 @@ def request_valid_song(access_token, genre=None, offset=0):
                         ),
                         headers=authorization_header
                         )
-            time.sleep(2)
             songs_info = json.loads(song_request.text)['tracks']['items']
             
             for song_info in songs_info:
@@ -192,7 +219,6 @@ def request_valid_song(access_token, genre=None, offset=0):
                         headers=authorization_header
                     )
 
-                    time.sleep(2)
                     album_genre = json.loads(genre_request.text)['genres']
                     genres_track.extend(album_genre)
                     # Search for artists genre
@@ -206,7 +232,6 @@ def request_valid_song(access_token, genre=None, offset=0):
                             headers=authorization_header
                         )
                         
-                        time.sleep(2)
                         artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
                         genres_track.extend(artist_genre)
                     # Check if an excluded genre is in the genres of the track 
@@ -221,6 +246,10 @@ def request_valid_song(access_token, genre=None, offset=0):
                     if break_outer_loop_2:
                         continue
                     
+                    for names in TracksName:
+                        if is_approximately_same(names,song_info['name']):
+                            break
+                    
                     artist = song_info['artists'][0]['name']
                     artist_id = song_info['artists'][0]['id']
                     album = song_info['album']['name']
@@ -232,12 +261,11 @@ def request_valid_song(access_token, genre=None, offset=0):
                     preview_url = song_info['preview_url']
                     break
         except IndexError as e:
-            print(e)
+            print("IndexError",e)
         except KeyError as e:
-            print(e)
+            print("KeyError",e)
         except json.JSONDecodeError:
-            print(genre_request.text)
-            time.sleep(2)
+            print("JSONDecodeError",genre_request.text)
         
     if song is None:
         artist = None
@@ -308,17 +336,17 @@ if __name__ == "__main__":
                     p += 1
                     print("{} Found a song: {} by {} with id: {} for genre: {}".format(p,song, artist, id, selected_genre))
                 else:
-                    print("Did not find a song for genre: {}".format(selected_genre))
                     subgenres.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results
+                    print("Did not find a song for genre: {}".format(selected_genre))
+
             if(consecutive_none_count == number_of_genres):
                 break
             count = count + 1
-        filename = "results.txt"
+        filename = "results"
 
         if not os.path.exists(filename):
-            with open(filename, 'w') as file:
-                file.write("This is a new file created!\n")
+            os.mkdir(filename)
         with open(f'{filename}/tracks-ids.pkl', 'wb') as output_file:
             pickle.dump(TracksIds, output_file)
         with open(f'{filename}/tracks-indexes.pkl', 'wb') as output_file:
