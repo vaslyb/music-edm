@@ -127,7 +127,7 @@ trance_genres = ['forest psy','goa trance', 'goa psytrance','deep darkpsy','dark
 techno_genres = ['dark techno','dark minimal techno','german dark minimal techno','minimal dub']
 dubstep_genres = ['dubstep','deep dubstep','filthstep','brostep']
 subgenres = house_genres + trance_genres + techno_genres + dubstep_genres 
-subgenres_original = subgenres
+subgenres_original = subgenres 
 
 # Open genres file
 # try:
@@ -208,48 +208,50 @@ def request_valid_song(access_token, genre=None, offset=0):
                 if id in TracksIds:
                     continue
                 else:
-                    genres_track = list()
-                    # Search for album genre
-                    album_id = song_info['album']['id']
-                    genre_request = requests.get(
-                        '{}/albums/{}'.format(
-                            SPOTIFY_API_URL,
-                            album_id
-                        ),
-                        headers=authorization_header
-                    )
+                    # genres_track = list()
+                    # # Search for album genre
+                    # album_id = song_info['album']['id']
+                    # genre_request = requests.get(
+                    #     '{}/albums/{}'.format(
+                    #         SPOTIFY_API_URL,
+                    #         album_id
+                    #     ),
+                    #     headers=authorization_header
+                    # )
 
-                    album_genre = json.loads(genre_request.text)['genres']
-                    genres_track.extend(album_genre)
-                    # Search for artists genre
-                    for artist in song_info['artists']:
-                        artist_id = artist['id']
-                        genre_request = requests.get(
-                            '{}/artists?ids={}'.format(
-                                SPOTIFY_API_URL,
-                                artist_id
-                            ),
-                            headers=authorization_header
-                        )
+                    # album_genre = json.loads(genre_request.text)['genres']
+                    # genres_track.extend(album_genre)
+                    # # Search for artists genre
+                    # for artist in song_info['artists']:
+                    #     artist_id = artist['id']
+                    #     genre_request = requests.get(
+                    #         '{}/artists?ids={}'.format(
+                    #             SPOTIFY_API_URL,
+                    #             artist_id
+                    #         ),
+                    #         headers=authorization_header
+                    #     )
                         
-                        artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
-                        genres_track.extend(artist_genre)
-                    # Check if an excluded genre is in the genres of the track 
-                    break_outer_loop_2 = False    
-                    for genre_track in genres_track:
-                        for exculded_genre in excluded:
-                            if(exculded_genre in genre_track):
-                                break_outer_loop_2 = True
-                                break
-                        if break_outer_loop_2:
-                            break
-                    if break_outer_loop_2:
-                        continue
+                    #     artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
+                    #     genres_track.extend(artist_genre)
+                    # # Check if an excluded genre is in the genres of the track 
+                    # break_outer_loop_2 = False    
+                    # for genre_track in genres_track:
+                    #     for exculded_genre in excluded:
+                    #         if(exculded_genre in genre_track):
+                    #             break_outer_loop_2 = True
+                    #             break
+                    #     if break_outer_loop_2:
+                    #         break
+                    # if break_outer_loop_2:
+                    #     continue
                     
                     for names in TracksName:
                         if is_approximately_same(names,song_info['name']):
                             break
-                    
+                    for genr in excluded:
+                        if genr in song_info['name'] or genr in song_info['album']['name']:
+                            break
                     artist = song_info['artists'][0]['name']
                     artist_id = song_info['artists'][0]['id']
                     album = song_info['album']['name']
@@ -265,7 +267,7 @@ def request_valid_song(access_token, genre=None, offset=0):
         except KeyError as e:
             print("KeyError",e)
         except json.JSONDecodeError:
-            print("JSONDecodeError",genre_request.text)
+            print("JSONDecodeError")
         
     if song is None:
         artist = None
@@ -317,10 +319,12 @@ if __name__ == "__main__":
         number_of_genres = len(subgenres)
         consecutive_none_count = 0
 
-        while(count < 10):
+        while(count < 100000000):
             for selected_genre in subgenres:
                 song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=count)
-                if id is not None and preview_url is not None and id not in TracksIds:
+                if(id in TracksIds):
+                    print("Found a duplicate song: {} by {} with id: {} for genre: {}".format(song, artist, id, selected_genre))
+                elif(id is not None and preview_url is not None):
                     TracksIds.append(id)
                     TracksName.append(song)
                     TracksArtist.append(artist)
