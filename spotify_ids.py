@@ -1,7 +1,6 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
-import pickle
 import base64
 import json
 import requests
@@ -9,11 +8,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import urllib.parse
-import time
 import os
 import nltk
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 import Levenshtein
+import time
 
 # Download NLTK resources (if not already downloaded)
 nltk.download('punkt')
@@ -40,109 +39,68 @@ def is_approximately_same(title1, title2, threshold=0.8):
     similarity = 1 - (distance / max_length)
     return similarity >= threshold
 
-subgenres_to_genres = {
-    "deep tech house": "house",
-    "deep progressive house": "house",
-    "dark progressive house": "house",
-    "funky tech house": "house",
-    "deep deep tech house": "house",
-    "tech house": "house",
-    "deep deep house": "house",
-    "jackin’ house": "house",
-    "funky house": "house",
-    "organic house": "house",
-    "minimal tech house": "house",
-    "classic house": "house",
-    "tribal house": "house",
-    "deep euro house": "house",
-    "soulful house": "house",
-    "deep house": "house",
-    "bouncy house": "house",
-    "deep groove house": "house",
-    "diva house": "house",
-    "bass house": "house",
-    "fidget house": "house",
-    "float house": "house",
-    "classic progressive house": "house",
-    "progressive house": "house",
-    "slap house": "house",
-    "deep tropical house": "house",
-    "tropical house": "house",
-    "stutter house": "house",
-    "future house": "house",
+tags_to_genres = {
+    "deep progressive house": " progressive house",
+    "dark progressive house": " progressive house",
+    "classic progressive house": " progressive house",
+    "progressive house": " progressive house",
     "minimal dubstep": "dubstep",
     "deep dubstep": "dubstep",
-    "deep filthstep": "dubstep",
-    "classic dubstep": "dubstep",
-    "filthstep": "dubstep",
-    "gaming dubstep": "dubstep",
-    "deathstep": "dubstep",
-    "riddim dubstep": "dubstep",
-    "tearout": "dubstep",
-    "brostep": "dubstep",
-    "goa trance": "trance",
-    "goa psytrance": "trance",
-    "progressive psytrance": "trance",
-    "psychedelic trance": "trance",
-    "dark psytrance": "trance",
-    "tech trance": "trance",
-    "cosmic uplifting trance": "trance",
-    "bubble trance": "trance",
-    "deep psytrance": "trance",
-    "deep progressive trance": "trance",
-    "progressive uplifting trance": "trance",
-    "deep uplifting trance": "trance",
-    "acid trance": "trance",
-    "progressive trance": "trance",
-    "old school hard trance": "trance",
-    "forest psy": "trance",
-    "deep full on": "trance",
-    "full on": "trance",
-    "deep minimal techno": "techno",
-    "dark techno": "techno",
-    "raw techno": "techno",
-    "dark minimal techno": "techno",
-    "deep techno": "techno",
-    "minimal techno": "techno",
-    "acid techno": "techno",
-    "industrial techno": "techno",
-    "modular techno": "techno",
-    "bleep techno": "techno",
-    "deep liquid bass": "drum and bass",
-    "jump up": "drum and bass",
-    "neuro step": "drum and bass",
-    "darkstep": "drum and bass",
-    "neurofunk": "drum and bass",
-    "dark psytrance": "trance",
-    "deep darkpsy": "trance",
-    "german dark minimal techno": "techno",
     "dubstep": "dubstep",
-    'minimal dub': 'techno',
+    "filthstep": "dubstep",
+    "brostep": "dubstep",
+    "goa trance": "psytrance",
+    "goa psytrance": "psytrance",
+    "dark psytrance": "psytrance",
+    "deep darkpsy": "psytrance",
+    "forest psy": "psytrance",
+    "deep minimal techno": "dark minimal techno",
+    "dark techno": "dark minimal techno",
+    "dark minimal techno": "dark minimal techno",
+    "deep techno": "dark minimal techno",
+    "minimal techno": "dark minimal techno",
+    "german dark minimal techno": "dark minimal techno",
+    'minimal dub': 'dark minimal techno',
 }
 
-genres = ['house', 'dubstep', 'trance', 'techno','drum and bass']
+genres = list(set(tags_to_genres.values()))
+progressive_house_tags = ['progressive house','classic progressive house','deep progressive house','dark progressive house']
+psytrance_tags = ['forest psy','goa trance', 'goa psytrance','deep darkpsy','dark psytrance']
+dark_minimal_techno_tags = ['dark techno','dark minimal techno','german dark minimal techno','minimal dub']
+dubstep_tags = ['dubstep','deep dubstep','filthstep','brostep']
+tags = progressive_house_tags + psytrance_tags + dark_minimal_techno_tags + dubstep_tags
+counter = {}
+if os.path.exists('./results/counter.json'):
+    with open('./results/counter.json') as f:
+        counter = json.load(f)
+if os.path.exists('./resutls/count.txt'):
+    with open('./results/count.txt', 'r') as f:
+        count = int(f.read())
+else:
+    counter = {key: 0 for key in tags}
+    count = 0
 
-house_genres = ['progressive house','classic progressive house','deep progressive house','dark progressive house']
-trance_genres = ['forest psy','goa trance', 'goa psytrance','deep darkpsy','dark psytrance']
-techno_genres = ['dark techno','dark minimal techno','german dark minimal techno','minimal dub']
-dubstep_genres = ['dubstep','deep dubstep','filthstep','brostep']
-subgenres = house_genres + trance_genres + techno_genres + dubstep_genres 
-subgenres_original = subgenres 
-
-# Open genres file
-# try:
-#        genre_file = 'genres.json'
-#     with open(genre_file, 'r') as infile:
-#         subgenres = json.load(infile)
-#         subgenres_original = subgenres
-# except FileNotFoundError:
-#     print("Couldn't find genres file!")
-#     sys.exit(1)
-
-# Load credentials from config file
 with open('config.json') as f:
     config = json.load(f)
+   
+def save():
+    filename = "results"
+
+    if not os.path.exists(filename):
+        os.mkdir(filename)
+
+    zippedList =  list(zip(TracksIndexes, TracksName, TracksIds, TracksArtist, TracksArtistId, TracksTag, TracksGenre, TracksPreview, TracksAlbum, TracksAlbumId, TracksReleaseDate, TracksDuration, TracksPopularity))
+
+    df = pd.DataFrame(zippedList, columns = ['Index', 'Name' , 'ID', 'Artist', "Artist's ID", 'Tag', 'Genre',  'Preview', 'Album', "Album's ID", "Release Date", "Duration", "Popularity"], index=TracksIndexes) 
     
+    df.to_csv(f'{filename}/tracks.csv',index=False)
+    send_email("Script Completed ", "Your Python script has finished successfully.")
+
+    with open('./results/counter.json', 'w') as f:
+        json.dump(counter, f)
+    with open('./results/count.txt', 'w') as f:
+        f.write(str(count))
+
 def send_email(subject, body):
     # Email configuration
     sender_email = 'vlyberatos@gmail.com'  # Replace with your email address
@@ -177,109 +135,115 @@ def request_valid_song(access_token, genre=None, offset=0):
     # Make a request for the Search API with pattern and random index
     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
     
-    song = None
-    for _ in range(2):
-        try:
-            excluded_genres = [gen for gen in genres if gen != subgenres_to_genres[genre]]
+    try:
+        excluded_genres = [gen for gen in genres if gen != tags_to_genres[genre]]
 
-            excluded_subgenres = [gen for gen in subgenres if subgenres_to_genres[gen] != subgenres_to_genres[genre]]
-            excluded = excluded_genres + excluded_subgenres
-            # Construct the query string to include one genre and exclude some genres
-            included_genre_query = "genre:\"{}\"".format(genre)
-            
-            # If you want to add exclude criteria in query
-            #excluded_genres_query = "".join([" NOT genre:\"{}\"".format(gen) for gen in excluded_genres])
-            #genre_query = "{}{}".format(included_genre_query, excluded_genres_query)
-            
-            # Make the request to Spotify API with the query
-            genre_query = urllib.parse.quote_plus(included_genre_query)
-            song_request = requests.get(
-                        '{}/search?q={}&type=track&offset={}'.format(
-                            SPOTIFY_API_URL,
-                            genre_query,
-                            offset
-                        ),
-                        headers=authorization_header
-                        )
-            songs_info = json.loads(song_request.text)['tracks']['items']
-            
-            for song_info in songs_info:
-                id = song_info['id']
-                if id in TracksIds:
-                    continue
-                else:
-                    # genres_track = list()
-                    # # Search for album genre
-                    # album_id = song_info['album']['id']
-                    # genre_request = requests.get(
-                    #     '{}/albums/{}'.format(
-                    #         SPOTIFY_API_URL,
-                    #         album_id
-                    #     ),
-                    #     headers=authorization_header
-                    # )
-
-                    # album_genre = json.loads(genre_request.text)['genres']
-                    # genres_track.extend(album_genre)
-                    # # Search for artists genre
-                    # for artist in song_info['artists']:
-                    #     artist_id = artist['id']
-                    #     genre_request = requests.get(
-                    #         '{}/artists?ids={}'.format(
-                    #             SPOTIFY_API_URL,
-                    #             artist_id
-                    #         ),
-                    #         headers=authorization_header
-                    #     )
-                        
-                    #     artist_genre = json.loads(genre_request.text)['artists'][0]['genres']  
-                    #     genres_track.extend(artist_genre)
-                    # # Check if an excluded genre is in the genres of the track 
-                    # break_outer_loop_2 = False    
-                    # for genre_track in genres_track:
-                    #     for exculded_genre in excluded:
-                    #         if(exculded_genre in genre_track):
-                    #             break_outer_loop_2 = True
-                    #             break
-                    #     if break_outer_loop_2:
-                    #         break
-                    # if break_outer_loop_2:
-                    #     continue
-                    
-                    for names in TracksName:
-                        if is_approximately_same(names,song_info['name']):
-                            break
-                    for genr in excluded:
-                        if genr in song_info['name'] or genr in song_info['album']['name']:
-                            break
-                    artist = song_info['artists'][0]['name']
-                    artist_id = song_info['artists'][0]['id']
-                    album = song_info['album']['name']
-                    album_id = song_info['album']['id']
-                    song = song_info['name']
-                    popularity = song_info['popularity'] 
-                    release_date = song_info['album']['release_date'] 
-                    duration = song_info['duration_ms']/1000
-                    preview_url = song_info['preview_url']
-                    break
-        except IndexError as e:
-            print("IndexError",e)
-        except KeyError as e:
-            print("KeyError",e)
-        except json.JSONDecodeError:
-            print("JSONDecodeError")
+        excluded_tags = [gen for gen in tags if tags_to_genres[gen] != tags_to_genres[genre]]
+        excluded = excluded_genres + excluded_tags
+        # Construct the query string to include one genre and exclude some genres
+        included_genre_query = "genre:\"{}\"".format(genre)
         
-    if song is None:
-        artist = None
-        song = None
-        id = None
-        preview_url = None
-        artist_id = None
-        album = None
-        album_id = None
-        release_date = None
-        duration = None
-        popularity = None
+        # Make the request to Spotify API with the query
+        genre_query = urllib.parse.quote_plus(included_genre_query)
+        song_request = requests.get(
+                    '{}/search?q={}&type=track&offset={}'.format(
+                        SPOTIFY_API_URL,
+                        genre_query,
+                        offset
+                    ),
+                    headers=authorization_header
+                    )
+        artist = list()
+        artist_id = list()
+        album = list()
+        album_id = list()
+        release_date = list()
+        duration = list()
+        popularity = list()
+        preview_url = list()
+        song = list()
+        id = list()
+        count_same = 0
+        songs_info =[0]
+        songs_info = json.loads(song_request.text)['tracks']['items']
+
+        for song_info in songs_info:
+            id_temp = song_info['id']
+            if id_temp in TracksIds:
+                count_same += 1
+                continue
+            if song_info['preview_url'] is None:
+                continue
+            else:
+                                
+                for names in TracksName:
+                    if is_approximately_same(names,song_info['name']):
+                        continue
+                for genr in excluded:
+                    if genr in song_info['name'] or genr in song_info['album']['name']:
+                        continue
+
+                id.append(song_info['id'])
+                artist.append(song_info['artists'][0]['name'])
+                artist_id.append(song_info['artists'][0]['id'])
+                album.append(song_info['album']['name'])
+                album_id.append(song_info['album']['id'])
+                song.append(song_info['name'])
+                popularity.append(song_info['popularity'])
+                release_date.append(song_info['album']['release_date'])
+                duration.append(song_info['duration_ms']/1000)
+                preview_url.append(song_info['preview_url'])
+                continue
+    except IndexError as e:
+        print("IndexError",e)
+    except KeyError as e:
+        print("KeyError",song_request.status_code)
+        song.append("Error")
+        artist.append(None)
+        id.append(None)
+        preview_url.append(None)
+        artist_id.append(None)
+        album.append(None)
+        album_id.append(None)
+        release_date.append(None)
+        duration.append(None)
+        popularity.append(None)
+    except json.JSONDecodeError as e:
+        song.append("Error")
+        artist.append(None)
+        id.append(None)
+        preview_url.append(None)
+        artist_id.append(None)
+        album.append(None)
+        album_id.append(None)
+        release_date.append(None)
+        duration.append(None)
+        popularity.append(None)
+        print("Too many requests, waiting for 10 seconds")
+        time.sleep(10)        
+    if count_same == len(songs_info):
+        song.append("Same")
+        artist.append(None)
+        id.append(None)
+        preview_url.append(None)
+        artist_id.append(None)
+        album.append(None)
+        album_id.append(None)
+        release_date.append(None)
+        duration.append(None)
+        popularity.append(None)
+    if len(song)==0:
+        song.append(None)
+        artist.append(None)
+        song.append(None)
+        id.append(None)
+        preview_url.append(None)
+        artist_id.append(None)
+        album.append(None)
+        album_id.append(None)
+        release_date.append(None)
+        duration.append(None)
+        popularity.append(None)
               
     return song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity
 
@@ -298,69 +262,76 @@ if __name__ == "__main__":
         API_VERSION = "v1"
         SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
 
-        TracksIds = []
-        TracksIndexes = []
-        TracksArtist = []
-        TracksArtistId = []
-        TracksPopularity = []
-        TracksAlbum = []
-        TracksAlbumId = []
-        TracksReleaseDate = []
-        TracksDuration = []
-        TracksName = []
-        TracksGenre = []
-        TracksPreview = []  
-        p = 0
+        TracksIndexes = list()
+        TracksName = list()
+        TracksIds = list()
+        TracksArtist = list()
+        TracksArtistId = list()
+        TracksTag = list()
+        TracksGenre = list()
+        TracksPreview = list()
+        TracksAlbum = list()
+        TracksAlbumId = list()
+        TracksReleaseDate = list()
+        TracksDuration = list()
+        TracksPopularity = list()
+
+        file_path = './results/tracks.csv'
+        if not os.path.exists(file_path):
+            print(f"The file '{file_path}' does not exist.")
+        else:
+            df = pd.read_csv(file_path)
+
+            TracksIndexes = df['Index'].tolist()
+            TracksName = df['Name'].tolist()
+            TracksIds = df['ID'].tolist()
+            TracksArtist = df['Artist'].tolist()
+            TracksArtistId = df["Artist's ID"].tolist()
+            TracksTag = df['Tag'].tolist()
+            TracksGenre = df['Genre'].tolist()
+            TracksPreview = df['Preview'].tolist()
+            TracksAlbum = df['Album'].tolist()
+            TracksAlbumId = df["Album's ID"].tolist()
+            TracksReleaseDate = df["Release Date"].tolist()
+            TracksDuration = df["Duration"].tolist()
+            TracksPopularity = df["Popularity"].tolist()
 
         # Get a Spotify API token
         access_token = get_token()  
         consecutive_none_count = 0
-        count = 0
-        number_of_genres = len(subgenres)
-        consecutive_none_count = 0
-
-        while(count < 100000000):
-            for selected_genre in subgenres:
+        number_of_genres = len(tags)
+        while(True):
+            for selected_genre in tags:
                 song,artist,artist_id,id,preview_url,album,album_id,release_date,duration,popularity = request_valid_song(access_token, genre=selected_genre,offset=count)
-                if(id in TracksIds):
-                    print("Found a duplicate song: {} by {} with id: {} for genre: {}".format(song, artist, id, selected_genre))
-                elif(id is not None and preview_url is not None):
-                    TracksIds.append(id)
-                    TracksName.append(song)
-                    TracksArtist.append(artist)
-                    TracksGenre.append(selected_genre)
-                    TracksPreview.append(preview_url)
-                    TracksArtistId.append(artist_id)
-                    TracksAlbum.append(album)
-                    TracksAlbumId.append(album_id)
-                    TracksReleaseDate.append(release_date)
-                    TracksDuration.append(duration)
-                    TracksPopularity.append(popularity)
-                    TracksIndexes.append(p)  
-                    p += 1
-                    print("{} Found a song: {} by {} with id: {} for genre: {}".format(p,song, artist, id, selected_genre))
-                else:
-                    subgenres.remove(selected_genre)  # Remove genre from list
-                    consecutive_none_count += 1  # Increase the count of consecutive None results
-                    print("Did not find a song for genre: {}".format(selected_genre))
+                p = [numb for numb in range(len(TracksIds),len(TracksIds)+len(id))]
 
+                if(song[0]=="Error"):
+                    continue
+                if(song[0]=="Same"):
+                    counter[selected_genre] = counter[selected_genre] + 20
+                elif(song[0]==None):
+                    tags.remove(selected_genre)  # Remove genre from list
+                    consecutive_none_count += 1  # Increase the count of consecutive None results
+                else:
+                    TracksIds.extend(id)
+                    TracksName.extend(song)
+                    TracksArtist.extend(artist)
+                    TracksGenre.extend([tags_to_genres[selected_genre]]*len(id))
+                    TracksTag.extend([selected_genre]*len(id))
+                    TracksPreview.extend(preview_url)
+                    TracksArtistId.extend(artist_id)
+                    TracksAlbum.extend(album)
+                    TracksAlbumId.extend(album_id)
+                    TracksReleaseDate.extend(release_date)
+                    TracksDuration.extend(duration)
+                    TracksPopularity.extend(popularity)
+                    TracksIndexes.extend(p)  
+                    counter[selected_genre] = counter[selected_genre] + len(id)
+                count = count + 20
             if(consecutive_none_count == number_of_genres):
                 break
-            count = count + 1
-        filename = "results"
-
-        if not os.path.exists(filename):
-            os.mkdir(filename)
-        with open(f'{filename}/tracks-ids.pkl', 'wb') as output_file:
-            pickle.dump(TracksIds, output_file)
-        with open(f'{filename}/tracks-indexes.pkl', 'wb') as output_file:
-            pickle.dump(TracksIndexes, output_file)
-
-        zippedList =  list(zip(TracksIndexes, TracksName, TracksIds, TracksArtist, TracksArtistId, TracksGenre, TracksPreview, TracksAlbum, TracksAlbumId, TracksReleaseDate, TracksDuration, TracksPopularity))
-
-        df = pd.DataFrame(zippedList, columns = ['Index', 'Name' , 'ID', 'Artist', "Artist's ID", 'Genre',  'Preview', 'Album', "Album's ID", "Release Date", "Duration", "Popularity"], index=TracksIndexes) 
-        
-        df.to_csv(f'{filename}/tracks.csv',index=False)
-        send_email("Script Completed ", "Your Python script has finished successfully.")
+        save()
+    except KeyboardInterrupt:  
+        save()             
     except Exception as e:
         send_email("Script Error", f"An error occurred in your Python script:\n\n{str(e)}")
