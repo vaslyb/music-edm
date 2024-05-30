@@ -196,7 +196,7 @@ def request_valid_song(access_token, genre=None, offset=0):
                 continue
     except IndexError as e:
         print("IndexError",e)
-    except KeyError as e:
+    except KeyError as _:
         print("KeyError",song_request.status_code)
         song.append("Error")
         artist.append(None)
@@ -208,7 +208,7 @@ def request_valid_song(access_token, genre=None, offset=0):
         release_date.append(None)
         duration.append(None)
         popularity.append(None)
-    except json.JSONDecodeError as e:
+    except json.JSONDecodeError as _:
         song.append("Error")
         artist.append(None)
         id.append(None)
@@ -309,7 +309,7 @@ if __name__ == "__main__":
                     continue
                 if(song[0]=="Same"):
                     counter[selected_genre] = counter[selected_genre] + 20
-                elif(song[0]==None):
+                elif(song[0] is None):
                     tags.remove(selected_genre)  # Remove genre from list
                     consecutive_none_count += 1  # Increase the count of consecutive None results
                 else:
