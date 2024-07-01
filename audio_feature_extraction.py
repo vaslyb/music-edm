@@ -5,7 +5,7 @@ import os
 input_dir = "./results/audio/"
 
 # Path to the directory where you want to save output files
-output_dir = "./results/features/"
+output_dir = "./results/features_auto/"
 os.makedirs(output_dir, exist_ok=True)
 
 # Path to the executable file
