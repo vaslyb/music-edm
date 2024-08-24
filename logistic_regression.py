@@ -10,6 +10,7 @@ import os
 import pandas as pd
 import statsmodels.api as sm
 from scipy.stats import norm
+from scipy.stats import chi2
 
 # Define model 
 model = LogisticRegression(random_state=0, max_iter=1000,multi_class='multinomial')
@@ -29,18 +30,15 @@ X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
 standarizer = StandardScaler()
 X = standarizer.fit_transform(X)
 
-# Define model
-model = sm.MNLogit(y, X)
-
-# Fit model
-result = model.fit(maxiter=1000)
-
 # transform one hot encoded labels to integers
 y = np.argmax(y, axis=1)
 
+# Fit the model
+model.fit(X, y)
+
 # model predictions
-y_pred = np.argmax(model.predict(result.params, X), axis=1)
-y_prob = model.predict(result.params, X)
+y_pred = model.predict(X)
+y_prob = model.predict_proba(X)
 
 #  Hyperparameter Tuning with sklearn
 # grid = dict()
@@ -53,8 +51,8 @@ y_prob = model.predict(result.params, X)
 # print('Config: %s' % results.best_params_)
 
 # Evaluate Model with Cross-Validation with sklearn
-# scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
-# print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
+scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
+print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 
 # Interpretations
 
@@ -64,38 +62,50 @@ os.makedirs('./results/logistic_regression', exist_ok=True)
 feature_names = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
 feature_names = [feature.replace(' mean', '') for feature in feature_names]
-feature_names = ['Intercept'] + feature_names
 target_names = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 
 # Coefficients
-coefficients = result.params
-inferred_coefficients = -coefficients.sum(axis=1)
-coefficients = np.concatenate((coefficients, inferred_coefficients[:, None]), axis=1)
-coefficients = coefficients.transpose()
+coefficients = model.coef_
 coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
+coefficinets_df_transposed = coefficients_df.T
 coefficients_df.to_csv('./results/logistic_regression/coefficients.csv')
 
+# Design matrix 
+X_design = np.hstack([np.ones((X.shape[0], 1)), X])
+
+# Weight matrix
+W = np.zeros((y_prob.shape[1],X_design.shape[0], X_design.shape[0]))
+for i in range(X.shape[0]):  
+    for j in range(y_prob.shape[1]):
+        p = y_prob[i, j]
+        W[j,i,i] = p * (1 - p) 
+        
+# Hessian matrix
+Hessian = np.zeros((y_prob.shape[1],X_design.shape[1], X_design.shape[1]))
+for j in range(y_prob.shape[1]):    
+    Hessian[j] = np.dot(X_design.T, np.dot(W[j], X_design))
+# Covariance matrix    
+cov_matrix = np.linalg.inv(Hessian)
 # Standard errors
-standard_errors = result.bse
-standard_errors = standard_errors.transpose()
-# Calculate Wald statistics
-wald_statistics = (coefficients / standard_errors) ** 2
-
-# Calculate p-values
-p_values = 1 - sm.stats.chisqprob(wald_statistics, df=1)
-
-# Print the summary (includes coefficients, standard errors, and more)
-print(result.summary())
-
-# Get the confidence intervals (default is 95% CI)
-conf_intervals = result.conf_int()
-print("Confidence Intervals:\n", conf_intervals)
-
+standard_errors = np.zeros((y_prob.shape[1],X_design.shape[1]))
+for j in range(y_prob.shape[1]):
+    standard_errors[j] = np.sqrt(np.diag(cov_matrix[j]))
+ 
+# Wald statistic 
+logitParams = np.hstack([model.intercept_.reshape(-1, 1), model.coef_])
+wald_statistics = (logitParams / standard_errors) ** 2
+p_values = chi2.sf(wald_statistics, df=1)
+with open('./results/logistic_regression/p_values_ward_test.csv', 'w') as f:
+    f.write('Feature,Class,P-value\n')
+    for i, target in enumerate(target_names):
+        for j, feature in enumerate(feature_names):
+            f.write(f'{feature},{target},{p_values[i, j]}\n')
+            
 # Plot all coefficients
 plt.figure(figsize=(10, 6))
-coefficients_df.plot(kind='bar')
-plt.title('Logistic Regression Coefficients for Each Class')
+coefficinets_df_transposed.plot(kind='bar')
+plt.title('Coefficients per Class')
 plt.ylabel('Coefficient Value')
 plt.xlabel('Features')
 plt.xticks(rotation=45, ha='right')
@@ -107,11 +117,11 @@ plt.savefig('./results/logistic_regression/coefficients.png')
 # Plot the most important coefficients based on the feature importance
 
 top_coefficients = np.argsort(np.mean(np.abs(coefficients), axis=0))[::-1]
-coeff_df_temp = coefficients_df.iloc[top_coefficients[:10]]
-
+top10 = top_coefficients[:10]
+coeff_df_temp = coefficinets_df_transposed.iloc[top10]
 plt.figure(figsize=(10, 6))
 coeff_df_temp.plot(kind='bar')
-plt.title('Logistic Regression Coefficients for Each Class for the Most Important Features')
+plt.title('Coefficients per Class')
 plt.ylabel('Coefficient Value')
 plt.xlabel('Features')
 plt.xticks(rotation=45, ha='right')
@@ -120,46 +130,45 @@ plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
 plt.savefig('./results/logistic_regression/important_coefficients.png') 
 
+# Plot the Effects
 
-# Effect 
-# print(X.shape, coefficients.T.shape)
-# effects = np.dot(X, coefficients.T)  # X_test (samples x features) * coefficients (features x classes)
+def plot_effects(effects, feature_names, target_name, output_dir):
+    plt.figure()
+    data = [effects[target_name][feature] for feature in feature_names]
+    plt.boxplot(data, labels=feature_names, patch_artist=False, showmeans=True, meanline=True, showfliers=True)
+    plt.title(feature.replace('_', ' ').capitalize())
+    plt.xlabel('Feature')
+    plt.ylabel(target_name.replace('_', ' ').capitalize())
+    plt.savefig(os.path.join(output_dir, f'{target_name}_effects_boxplot.png'))
+    plt.close()
 
-# # Create a DataFrame to store the effects
-# effects_df = pd.DataFrame(effects, columns=target_names)
+n_classes, n_features = coefficients.shape
 
-# # Save the effects to a CSV file
-# output_path = './results/logistic_regression/effects.csv'
-# effects_df.to_csv(output_path, index=False)
+effects = []
 
-# # Confusion Matrix
-# conf_matrix = confusion_matrix(y, y_pred)
-# fig, ax = plt.subplots(figsize=(8, 6))
-# cax = ax.matshow(conf_matrix, cmap='Reds')
-# # Add colorbar
-# plt.colorbar(cax)
-# # Add labels
-# ax.set_xlabel('Predicted Label')
-# ax.set_ylabel('True Label')
-# ax.set_title('Confusion Matrix')
-# # Add text annotations
-# for i in range(len(target_names)):
-#     for j in range(len(target_names)):
-#         ax.text(j, i, conf_matrix[i, j], ha='center', va='center', color='black')
-# # Set ticks and labels
-# ax.set_xticks(np.arange(len(target_names)))
-# ax.set_yticks(np.arange(len(target_names)))
-# ax.set_xticklabels(target_names)
-# ax.set_yticklabels(target_names)
-# # Rotate the tick labels and set their alignment
-# plt.xticks(rotation=90, ha='right')
-# # Adjust layout
-# plt.tight_layout()
-# # Save the plot
-# plt.savefig('./results/logistic_regression/confusion_matrix.png')  # Save as PNG file
-# plt.show()
-
+# Calculate effects for each class
+# Create a dictionary to store the effects per class
+effects_dict = {}
+for class_idx, class_name in enumerate(target_names):
+    # Multiply each feature value by its coefficient for this class
+    class_coefficients = coefficients[class_idx]
+    effects_per_class = np.multiply(X , class_coefficients)  # Dot product
+    for feature_idx in range(n_features):
+        if class_name not in effects_dict:
+            effects_dict[class_name] = {}
+            if feature_names[feature_idx] not in effects_dict[class_name]:
+                effects_dict[class_name][feature_names[feature_idx]] = []
+        effects_dict[class_name][feature_names[feature_idx]] = effects_per_class[:, feature_idx]
+    
+for class_name in target_names:
+    plot_effects(effects_dict, feature_names, class_name, './results/logistic_regression')
+    
 # Classification report
 class_report = classification_report(y, y_pred, target_names=target_names)
 print("Classification Report:")
 print(class_report)
+
+# Save the classification report to a file
+with open('./results/logistic_regression/classification_report.txt', 'w') as f:
+    f.write("Classification Report:\n")
+    f.write(class_report)
