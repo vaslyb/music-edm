@@ -12,14 +12,14 @@ import pandas as pd
 ## Train Model
 
 # define model
-model = LinearDiscriminantAnalysis()
+model = LinearDiscriminantAnalysis(random_state=0)
 
 # define model evaluation method
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
 # Load the dataset
-X = np.loadtxt('./results/dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('./results/dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=1)
+y = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=1)
 
 # replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
@@ -62,23 +62,21 @@ print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 ## Interpretations
 
 os.makedirs('./results/lda', exist_ok=True)
+feature_names = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
+target_names = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 
 # Explained variance (captures the ratio of the total variance each principal component captures, how whel each LD separates the classes)
 print("Explained Variance Ratio:")
 print(model.explained_variance_ratio_)
 
 # Coefficients (In LDA, the coefficients are weights associated with each feature for constructing the Linear Discriminants. Each Linear Discriminant is a linear combination of the original features, and the coefficients determine the contribution of each feature to this combination.)
-feature_names = np.loadtxt('./results/dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
-target_names = np.loadtxt('./results/dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 coefficients = model.coef_
 coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
 coefficients_df.to_csv('./results/lda/coefficients.csv')
 
-
 # Confusion Matrix
-# print("Confusion Matrix:")
 conf_matrix = confusion_matrix(y, y_pred)
 fig, ax = plt.subplots(figsize=(8, 6))
 cax = ax.matshow(conf_matrix, cmap='Blues')
