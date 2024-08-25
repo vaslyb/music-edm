@@ -126,7 +126,6 @@ with open('./results/logistic_regression/p_values_ward_test.csv', 'w') as f:
 # Plot all coefficients
 plt.figure(figsize=(10, 6))
 coefficinets_df_transposed.plot(kind='bar')
-plt.title('Coefficients per Class')
 plt.ylabel('Coefficient Value')
 plt.xlabel('Features')
 plt.xticks(rotation=45, ha='right')
