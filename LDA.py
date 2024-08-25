@@ -85,7 +85,6 @@ plt.colorbar(cax)
 # Add labels
 ax.set_xlabel('Predicted Label')
 ax.set_ylabel('True Label')
-ax.set_title('Confusion Matrix')
 # Add text annotations
 for i in range(len(target_names)):
     for j in range(len(target_names)):
