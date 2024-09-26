@@ -234,9 +234,14 @@ combined_feature_indices = sorted(combined_feature_indices)  # Sort for consiste
 relevant_table = table[:, list(combined_feature_indices)]
 relevant_feature_names = [feature_names[i] for i in combined_feature_indices]
 plt.figure(figsize=(10, 8))
-sns.heatmap(relevant_table, annot=True, cmap='coolwarm', xticklabels=relevant_feature_names, yticklabels=target_names,annot_kws={"size": 6})
+sns.heatmap(relevant_table.T, annot=True, cmap='coolwarm', 
+            xticklabels=target_names, yticklabels=relevant_feature_names, 
+            annot_kws={"size": 6})
 plt.title("LDA's Most Important Coefficients")
 plt.xticks(rotation=90)
 plt.yticks(rotation=0)
+# Invert the y-axis to have genres at the top
+plt.gca().invert_yaxis()
 plt.tight_layout()
-plt.savefig('./results/lda/important_coefficients.png') 
+plt.show()
+plt.savefig('./results/logistic_regression/important_coefficients.png') 
