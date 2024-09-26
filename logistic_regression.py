@@ -8,6 +8,8 @@ import os
 import pandas as pd
 from scipy.stats import chi2
 import warnings
+import csv 
+import seaborn as sns
 warnings.filterwarnings("ignore")
 
 # Define model 
@@ -207,3 +209,34 @@ class_report = classification_report(y, y_pred, target_names=target_names)
 with open('./results/logistic_regression/classification_report.txt', 'w') as f:
     f.write("Classification Report:\n")
     f.write(class_report)
+    
+# Plot the most important coefficients
+table = coefficients_df.iloc[:, 1:].to_numpy()
+flat_table = table.flatten()
+top_5_percent_threshold = np.percentile(flat_table, 95)
+worst_5_percent_threshold = np.percentile(flat_table, 5)
+top_5_percent_indices = np.argwhere(table >= top_5_percent_threshold)
+worst_5_percent_indices = np.argwhere(table <= worst_5_percent_threshold)
+with open('top_5_percent_pairs.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Row', 'Column', 'Value'])  # Header
+    for index in top_5_percent_indices:
+        writer.writerow([index[0], index[1], table[tuple(index)]])
+with open('worst_5_percent_pairs.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Row', 'Column', 'Value'])  # Header
+    for index in worst_5_percent_indices:
+        writer.writerow([index[0], index[1], table[tuple(index)]])
+top_feature_indices = set(top_5_percent_indices[:, 1])
+worst_feature_indices = set(worst_5_percent_indices[:, 1])
+combined_feature_indices = top_feature_indices.union(worst_feature_indices)
+combined_feature_indices = sorted(combined_feature_indices)  # Sort for consistency
+relevant_table = table[:, list(combined_feature_indices)]
+relevant_feature_names = [feature_names[i] for i in combined_feature_indices]
+plt.figure(figsize=(10, 8))
+sns.heatmap(relevant_table, annot=True, cmap='coolwarm', xticklabels=relevant_feature_names, yticklabels=target_names,annot_kws={"size": 6})
+plt.title("LDA's Most Important Coefficients")
+plt.xticks(rotation=90)
+plt.yticks(rotation=0)
+plt.tight_layout()
+plt.savefig('./results/lda/important_coefficients.png') 

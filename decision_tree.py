@@ -1,6 +1,5 @@
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier,export_graphviz
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score,GridSearchCV,RepeatedStratifiedKFold
 from sklearn.metrics import confusion_matrix, classification_report
@@ -37,10 +36,6 @@ y = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=1)
 # Replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
 X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
-
-# Standardize the data
-standarizer = StandardScaler()
-X = standarizer.fit_transform(X)
 
 # Transform one hot encoded labels to integers
 y = np.argmax(y, axis=1)
@@ -199,18 +194,17 @@ ax.plot(ccp_alphas, test_scores, marker="o", drawstyle="steps-post")
 ax.legend()
 plt.savefig('./results/decision_tree/accuracy_vs_alpha.png')
 
-#
+# Keep the best model according to test set and save it
 
 best_model_index = np.argmax(test_scores)
 best_model = models[best_model_index]
 
-# Keep the best model according to test set and save it
 dot_data = export_graphviz(
     best_model, 
     out_file=None, 
     feature_names=feature_names, 
     class_names=target_names, 
-    filled=False,         # Set to False as per your request
+    filled=True,         # Set to False as per your request
     rounded=True,        # Rounded boxes for better aesthetics
     special_characters=True,
     proportion=True,     # Node sizes proportional to the number of samples
