@@ -238,9 +238,8 @@ sns.heatmap(relevant_table.T, annot=True, cmap='coolwarm',
             xticklabels=target_names, yticklabels=relevant_feature_names, 
             annot_kws={"size": 6})
 plt.title("Logistic Regression's Most Important Coefficients")
-plt.xticks(rotation=90)
+plt.xticks(rotation=0)
 plt.yticks(rotation=0)
-# Invert the y-axis to have genres at the top
 plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
