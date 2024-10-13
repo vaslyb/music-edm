@@ -17,8 +17,8 @@ model = LinearDiscriminantAnalysis()
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
 # Load the dataset
-X = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
+y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
 
 # Replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
@@ -45,10 +45,10 @@ scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
 print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 
 # Interpretations
-os.makedirs('./results/lda', exist_ok=True)
-feature_names = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+os.makedirs('../../results/lda', exist_ok=True)
+feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
-target_names = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 
 # Explained variance (captures the ratio of the total variance each principal component captures, how whel each LD separates the classes)
@@ -58,7 +58,7 @@ print(model.explained_variance_ratio_)
 # Coefficients (In LDA, the coefficients are weights associated with each feature for constructing the Linear Discriminants. Each Linear Discriminant is a linear combination of the original features, and the coefficients determine the contribution of each feature to this combination.)
 coefficients = model.coef_
 coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
-coefficients_df.to_csv('./results/lda/coefficients.csv')
+coefficients_df.to_csv('../../results/lda/coefficients.csv')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
@@ -76,14 +76,14 @@ ax.set_xticklabels(target_names)
 ax.set_yticklabels(target_names)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig('./results/lda/confusion_matrix.png')  # Save as PNG file
+plt.savefig('../../results/lda/confusion_matrix.png')  # Save as PNG file
 plt.show()
 
 # Classification report
 class_report = classification_report(y, y_pred)
 print("Classification Report:")
 print(class_report)
-with open('./results/lda/classification_report.txt', 'w') as f:
+with open('../../results/lda/classification_report.txt', 'w') as f:
     f.write(class_report)
 
 # Plotting the LDs
@@ -102,7 +102,7 @@ for i in range(n_lds):
         plt.ylabel(f'LD {j + 1}')
         plt.legend(loc='best')
         plt.title(f'LDA of Dataset: LD {i + 1} vs LD {j + 1}')
-        plt.savefig(f'./results/lda/ld{i + 1}_vs_ld{j + 1}.png')
+        plt.savefig(f'../../results/lda/ld{i + 1}_vs_ld{j + 1}.png')
 
 # Plot the most important coefficients
 table = coefficients_df.iloc[:, 1:].to_numpy()
@@ -138,4 +138,4 @@ plt.yticks(rotation=0)
 plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
-plt.savefig('./results/lda/important_coefficients.png') 
+plt.savefig('../../results/lda/important_coefficients.png') 

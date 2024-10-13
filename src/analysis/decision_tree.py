@@ -12,9 +12,9 @@ warnings.filterwarnings("ignore")
 
 # Define model 
 model = DecisionTreeClassifier(random_state=0)
-if os.path.exists('./results/decision_tree/best_hyperparameters.txt'):
+if os.path.exists('../../results/decision_tree/best_hyperparameters.txt'):
     best_params = {}
-    with open('./results/decision_tree/best_hyperparameters.txt', 'r') as f:
+    with open('../../results/decision_tree/best_hyperparameters.txt', 'r') as f:
         lines = f.readlines()
         best_score = float(lines[0].strip().split(': ')[1])
         for line in lines[2:]:
@@ -30,8 +30,8 @@ if os.path.exists('./results/decision_tree/best_hyperparameters.txt'):
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
 # Load the dataset
-X = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
+y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
 
 # Replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
@@ -48,7 +48,7 @@ y_pred = model.predict(X)
 y_prob = model.predict_proba(X)
 
 # Hyperparameter Tuning with sklearn
-if not os.path.exists('./results/decision_tree/best_hyperparameters.txt'):
+if not os.path.exists('../../results/decision_tree/best_hyperparameters.txt'):
     grid = dict()
     grid['criterion'] = ['gini', 'entropy']
     grid['max_depth'] = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -58,7 +58,7 @@ if not os.path.exists('./results/decision_tree/best_hyperparameters.txt'):
     results = search.fit(X, y)
     best_params = results.best_params_
     best_score = results.best_score_
-    with open('./results/decision_tree/best_hyperparameters.txt', 'w') as f:
+    with open('../../results/decision_tree/best_hyperparameters.txt', 'w') as f:
         f.write('Mean Accuracy: %.3f\n' % best_score)
         f.write('Best Hyperparameters:\n')
         for param, value in best_params.items():
@@ -70,13 +70,13 @@ scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
 print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 
 # Interpretations
-os.makedirs('./results/decision_tree', exist_ok=True)
+os.makedirs('../../results/decision_tree', exist_ok=True)
 
 # Define the feature names and target names
-feature_names = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
 feature_names = [feature.replace(' mean', '') for feature in feature_names]
-target_names = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 
 # Visualize the Decision Tree
@@ -92,7 +92,7 @@ dot_data = export_graphviz(
     precision=2          # Precision for node values
 )
 graph = graphviz.Source(dot_data)
-graph.render('./results/decision_tree/decision_tree', format='png', cleanup=True)
+graph.render('../../results/decision_tree/decision_tree', format='png', cleanup=True)
 
 # Feature Importance
 importances = model.feature_importances_
@@ -105,7 +105,7 @@ plt.xlabel('Importance')
 plt.ylabel('Feature')
 plt.title('Feature Importances')
 plt.tight_layout()
-plt.savefig('./results/decision_tree/feature_importances.png')
+plt.savefig('../../results/decision_tree/feature_importances.png')
 
 top10 = np.argsort(importances)[::-1][:10]
 top10_features = [feature_names[i] for i in top10][::-1]
@@ -116,7 +116,7 @@ plt.xlabel('Importance')
 plt.ylabel('Feature')
 plt.title('Top 10 Feature Importances')
 plt.tight_layout()
-plt.savefig('./results/decision_tree/top10_feature_importances.png')
+plt.savefig('../../results/decision_tree/top10_feature_importances.png')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
@@ -134,7 +134,7 @@ ax.set_xticklabels(target_names)
 ax.set_yticklabels(target_names)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig('./results/decision_tree/confusion_matrix.png')  
+plt.savefig('../../results/decision_tree/confusion_matrix.png')  
 plt.show()
 
 # Post pruning analysis
@@ -150,7 +150,7 @@ ax.set_xlabel("effective alpha")
 ax.set_ylabel("total impurity of leaves")
 ax.set_title("Total Impurity vs effective alpha for training set")
 fig.tight_layout()
-fig.savefig('./results/decision_tree/total_impurity_vs_effective_alpha.png')
+fig.savefig('../../results/decision_tree/total_impurity_vs_effective_alpha.png')
 
 # Train decision trees using effective alphas
 models = []
@@ -179,7 +179,7 @@ ax[1].set_xlabel("alpha")
 ax[1].set_ylabel("depth of tree")
 ax[1].set_title("Depth vs alpha")
 fig.tight_layout()
-fig.savefig('./results/decision_tree/number_of_nodes_vs_alpha.png')
+fig.savefig('../../results/decision_tree/number_of_nodes_vs_alpha.png')
 
 # Accuracy vs alpha for training and testing sets
 train_scores = [model.score(X_train, y_train) for model in models]
@@ -192,7 +192,7 @@ ax.set_title("Accuracy vs alpha for training and testing sets")
 ax.plot(ccp_alphas, train_scores, marker="o", drawstyle="steps-post")
 ax.plot(ccp_alphas, test_scores, marker="o", drawstyle="steps-post")
 ax.legend()
-plt.savefig('./results/decision_tree/accuracy_vs_alpha.png')
+plt.savefig('../../results/decision_tree/accuracy_vs_alpha.png')
 
 # Keep the best model according to test set and save it
 
@@ -211,10 +211,10 @@ dot_data = export_graphviz(
     precision=2          # Precision for node values
 )
 graph = graphviz.Source(dot_data)
-graph.render('./results/decision_tree/best_decision_tree', format='png', cleanup=True)
+graph.render('../../results/decision_tree/best_decision_tree', format='png', cleanup=True)
 
 # Classification report
 class_report = classification_report(y, y_pred, target_names=target_names)
-with open('./results/decision_tree/classification_report.txt', 'w') as f:
+with open('../../results/decision_tree/classification_report.txt', 'w') as f:
     f.write("Classification Report:\n")
     f.write(class_report)

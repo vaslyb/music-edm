@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 # Load the JSON file
-with open('./results/genre_statistics.json', 'r') as file:
+with open('../../results/genre_statistics.json', 'r') as file:
     data = json.load(file)
 
 # Prepare lists to store mean and variance values
@@ -55,7 +55,7 @@ for feature in df_mean.columns:
     plt.tight_layout()
 
     # Save the figure with a more descriptive filename
-    output_dir = './results/visualizations/'
+    output_dir = '../../results/visualizations/'
     os.makedirs(output_dir, exist_ok=True)
     plt.savefig(f'{output_dir}{feature.replace("_mean", "").lower()}.png')
 
@@ -105,8 +105,8 @@ def plot_features_for_genre(genre, features, title, output_filename):
 
 # Plot and save chroma features for each genre
 for genre in df_mean.index:
-    plot_features_for_genre(genre, feature_chroma, 'Chroma Features', f'./results/visualizations/chroma_per_genre/{genre.replace(" ", "_").lower()}_chroma_features.png')
+    plot_features_for_genre(genre, feature_chroma, 'Chroma Features', f'../../results/visualizations/chroma_per_genre/{genre.replace(" ", "_").lower()}_chroma_features.png')
 
 # Plot and save mfcc features for each genre
 for genre in df_mean.index:
-    plot_features_for_genre(genre, feature_mfcc, 'MFCC Features', f'./results/visualizations/mfcc_per_genre/{genre.replace(" ", "_").lower()}_mfcc_features.png')
+    plot_features_for_genre(genre, feature_mfcc, 'MFCC Features', f'../../results/visualizations/mfcc_per_genre/{genre.replace(" ", "_").lower()}_mfcc_features.png')

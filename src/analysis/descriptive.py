@@ -109,7 +109,7 @@ def main(root_dir, output_dir):
     print(f"Results saved to {output_dir}")
 
 if __name__ == "__main__":
-    root_directory = "./results/features/"
-    output_directory = "./results/statistics/"
+    root_directory = "../../results/features/"
+    output_directory = "../../results/statistics/"
     os.makedirs(output_directory, exist_ok=True)
     main(root_directory, output_directory)

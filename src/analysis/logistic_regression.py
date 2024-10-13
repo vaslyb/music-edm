@@ -14,10 +14,10 @@ warnings.filterwarnings("ignore")
 
 # Define model 
 model = LogisticRegression(random_state=0, max_iter=1000, multi_class='multinomial')
-if os.path.exists('./results/logistic_regression/best_hyperparameters.txt'):
+if os.path.exists('../../results/logistic_regression/best_hyperparameters.txt'):
     # Load the best hyperparameters from the file
     loaded_params = {}
-    with open('./results/logistic_regression/best_hyperparameters.txt', 'r') as f:
+    with open('../../results/logistic_regression/best_hyperparameters.txt', 'r') as f:
         lines = f.readlines()
         best_score = float(lines[0].strip().split(': ')[1])
         for line in lines[2:]:
@@ -30,8 +30,8 @@ if os.path.exists('./results/logistic_regression/best_hyperparameters.txt'):
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
 # Load the dataset
-X = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
+y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
 
 # replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
@@ -52,7 +52,7 @@ y_pred = model.predict(X)
 y_prob = model.predict_proba(X)
 
 # Hyperparameter Tuning with sklearn
-if not os.path.exists('./results/logistic_regression/best_hyperparameters.txt'):
+if not os.path.exists('../../results/logistic_regression/best_hyperparameters.txt'):
     grid = dict()
     grid['penalty'] = ['l1', 'l2', 'elasticnet', 'none']
     grid['solver'] = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
@@ -65,7 +65,7 @@ if not os.path.exists('./results/logistic_regression/best_hyperparameters.txt'):
     best_score = results.best_score_
 
     # Save the best hyperparameters to a file
-    with open('./results/logistic_regression/best_hyperparameters.txt', 'w') as f:
+    with open('../../results/logistic_regression/best_hyperparameters.txt', 'w') as f:
         f.write('Mean Accuracy: %.3f\n' % best_score)
         f.write('Best Hyperparameters:\n')
         for param, value in best_params.items():
@@ -77,20 +77,20 @@ scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
 print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 
 # Interpretations
-os.makedirs('./results/logistic_regression', exist_ok=True)
+os.makedirs('../../results/logistic_regression', exist_ok=True)
 
 # Define the feature names and target names
-feature_names = np.loadtxt('./dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
 feature_names = [feature.replace(' mean', '') for feature in feature_names]
-target_names = np.loadtxt('./dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 
 # Coefficients
 coefficients = model.coef_
 coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
 coefficinets_df_transposed = coefficients_df.T
-coefficients_df.to_csv('./results/logistic_regression/coefficients.csv')
+coefficients_df.to_csv('../../results/logistic_regression/coefficients.csv')
 
 # Design matrix 
 X_design = np.hstack([np.ones((X.shape[0], 1)), X])
@@ -119,7 +119,7 @@ for j in range(y_prob.shape[1]):
 logitParams = np.hstack([model.intercept_.reshape(-1, 1), model.coef_])
 wald_statistics = (logitParams / standard_errors) ** 2
 p_values = chi2.sf(wald_statistics, df=1)
-with open('./results/logistic_regression/p_values_ward_test.csv', 'w') as f:
+with open('../../results/logistic_regression/p_values_ward_test.csv', 'w') as f:
     f.write('Feature,Class,P-value\n')
     for i, target in enumerate(target_names):
         for j, feature in enumerate(feature_names):
@@ -134,7 +134,7 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Class', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
-plt.savefig('./results/logistic_regression/coefficients.png') 
+plt.savefig('../../results/logistic_regression/coefficients.png') 
 
 # Plot the most important coefficients based on the feature importance
 top_coefficients = np.argsort(np.mean(np.abs(coefficients), axis=0))[::-1]
@@ -149,7 +149,7 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Class', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
-plt.savefig('./results/logistic_regression/important_coefficients.png') 
+plt.savefig('../../results/logistic_regression/important_coefficients.png') 
 
 # Plot the Effects
 def plot_effects(effects, feature_names, target_name, output_dir, important=False):
@@ -178,12 +178,12 @@ for class_idx, class_name in enumerate(target_names):
                 effects_dict[class_name][feature_names[feature_idx]] = []
         effects_dict[class_name][feature_names[feature_idx]] = effects_per_class[:, feature_idx]
 for class_name in target_names:
-    plot_effects(effects_dict, feature_names, class_name, './results/logistic_regression')
+    plot_effects(effects_dict, feature_names, class_name, '../../results/logistic_regression')
 
 # Plot the most important effects based on the feature importance
 top10_feauture_names = list(list(coeff_df_temp.to_dict().values())[0].keys())
 for class_name in target_names:
-    plot_effects(effects_dict, top10_feauture_names, class_name, './results/logistic_regression', important=True)
+    plot_effects(effects_dict, top10_feauture_names, class_name, '../../results/logistic_regression', important=True)
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
@@ -201,12 +201,12 @@ ax.set_xticklabels(target_names)
 ax.set_yticklabels(target_names)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig('./results/logistic_regression/confusion_matrix.png')  # Save as PNG file
+plt.savefig('../../results/logistic_regression/confusion_matrix.png')  # Save as PNG file
 plt.show()
 
 # Classification report
 class_report = classification_report(y, y_pred, target_names=target_names)
-with open('./results/logistic_regression/classification_report.txt', 'w') as f:
+with open('../../results/logistic_regression/classification_report.txt', 'w') as f:
     f.write("Classification Report:\n")
     f.write(class_report)
     
@@ -243,4 +243,4 @@ plt.yticks(rotation=0)
 plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.show()
-plt.savefig('./results/logistic_regression/important_coefficients.png') 
+plt.savefig('../../results/logistic_regression/important_coefficients.png') 
