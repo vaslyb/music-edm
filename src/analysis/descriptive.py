@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import ttest_ind
 import pandas as pd
+import warnings
+import argparse
 
 # Define the note_mapping dictionary for translate_to_numeric function
 note_mapping = {
@@ -57,7 +59,6 @@ def generate_boxplots(genres_stats, output_dir):
             plt.xlabel('Genre')
             plt.ylabel(feature.replace('_', ' ').capitalize())
             plt.savefig(os.path.join(output_dir, f'{feature}_boxplot.png'))
-            plt.show()
             plt.close()
 
 def perform_t_tests(genres_stats):
@@ -84,8 +85,6 @@ def perform_t_tests(genres_stats):
     t_test_df = pd.DataFrame(t_test_results)
     return t_test_df
     
-    return t_test_results
-
 def main(root_dir, output_dir):
     genres_stats = {}
     for genre in os.listdir(root_dir):
@@ -109,7 +108,17 @@ def main(root_dir, output_dir):
     print(f"Results saved to {output_dir}")
 
 if __name__ == "__main__":
-    root_directory = "../../results/features/"
-    output_directory = "../../results/statistics/"
+    
+    warnings.filterwarnings("ignore")
+
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(description='Model Script')
+    parser.add_argument('--input_dir', type=str, required=True, help='Directory for input data files')
+    parser.add_argument('--output_dir', type=str, required=True, help='Directory to save results')
+    parser.add_argument('--select_features', action='store_true', help='Whether to select specific features or use all')
+
+    args = parser.parse_args()
+    root_directory = args.input_dir
+    output_directory = args.output_dir
     os.makedirs(output_directory, exist_ok=True)
     main(root_directory, output_directory)

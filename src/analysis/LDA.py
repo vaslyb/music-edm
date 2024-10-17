@@ -8,21 +8,58 @@ import matplotlib.pyplot as plt
 import os 
 import pandas as pd
 import seaborn as sns
-import csv
+import argparse
+
+# Set up argument parsing
+parser = argparse.ArgumentParser(description='LDA Model Script')
+parser.add_argument('--input_dir', type=str, required=True, help='Directory for input data files')
+parser.add_argument('--output_dir', type=str, required=True, help='Directory to save results')
+parser.add_argument('--select_features', action='store_true', help='Whether to select specific features or use all')
+
+args = parser.parse_args()
 
 # Define model
 model = LinearDiscriminantAnalysis()
 
+# path to save the resutls
+save_path = args.output_dir
+input_path = args.input_dir
+
 # Define model evaluation method
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
+# features and labels
+feature_names = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = feature_names[1:]
+target_names = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = target_names[1:]
+num_features = len(feature_names)
+num_labels = len(target_names)
+
 # Load the dataset
-X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=1, usecols=range(1, num_features+1))
+y = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=1, usecols=range(1, num_labels+1))
 
 # Replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
 X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
+
+# Feauture Selection
+target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
+disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
+                    'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
+                    'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+if args.select_features:
+    features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+else:
+    features_to_keep_index = range(num_features)
+    features_to_keep = feature_names
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+X = X[:,features_to_keep_index]
 
 # Standardize the data
 standarizer = StandardScaler()
@@ -45,11 +82,8 @@ scores = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
 print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 
 # Interpretations
-os.makedirs('../../results/lda', exist_ok=True)
-feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
-target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
+os.makedirs(save_path, exist_ok=True)
+
 
 # Explained variance (captures the ratio of the total variance each principal component captures, how whel each LD separates the classes)
 print("Explained Variance Ratio:")
@@ -57,8 +91,8 @@ print(model.explained_variance_ratio_)
 
 # Coefficients (In LDA, the coefficients are weights associated with each feature for constructing the Linear Discriminants. Each Linear Discriminant is a linear combination of the original features, and the coefficients determine the contribution of each feature to this combination.)
 coefficients = model.coef_
-coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
-coefficients_df.to_csv('../../results/lda/coefficients.csv')
+coefficients_df = pd.DataFrame(coefficients, columns=features_to_keep, index=target_names)
+coefficients_df.to_csv(save_path+'/coefficients.csv')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
@@ -76,14 +110,14 @@ ax.set_xticklabels(target_names)
 ax.set_yticklabels(target_names)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig('../../results/lda/confusion_matrix.png')  # Save as PNG file
+plt.savefig(f'{save_path}/confusion_matrix.png')  # Save as PNG file
 plt.show()
 
 # Classification report
 class_report = classification_report(y, y_pred)
 print("Classification Report:")
 print(class_report)
-with open('../../results/lda/classification_report.txt', 'w') as f:
+with open(f'{save_path}/classification_report.txt', 'w') as f:
     f.write(class_report)
 
 # Plotting the LDs
@@ -102,40 +136,40 @@ for i in range(n_lds):
         plt.ylabel(f'LD {j + 1}')
         plt.legend(loc='best')
         plt.title(f'LDA of Dataset: LD {i + 1} vs LD {j + 1}')
-        plt.savefig(f'../../results/lda/ld{i + 1}_vs_ld{j + 1}.png')
+        plt.savefig(f'{save_path}/ld{i + 1}_vs_ld{j + 1}.png')
 
-# Plot the most important coefficients
-table = coefficients_df.iloc[:, 1:].to_numpy()
-flat_table = table.flatten()
-top_5_percent_threshold = np.percentile(flat_table, 95)
-worst_5_percent_threshold = np.percentile(flat_table, 5)
-top_5_percent_indices = np.argwhere(table >= top_5_percent_threshold)
-worst_5_percent_indices = np.argwhere(table <= worst_5_percent_threshold)
-with open('top_5_percent_pairs.csv', mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Row', 'Column', 'Value'])  # Header
-    for index in top_5_percent_indices:
-        writer.writerow([index[0], index[1], table[tuple(index)]])
-with open('worst_5_percent_pairs.csv', mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Row', 'Column', 'Value'])  # Header
-    for index in worst_5_percent_indices:
-        writer.writerow([index[0], index[1], table[tuple(index)]])
-top_feature_indices = set(top_5_percent_indices[:, 1])
-worst_feature_indices = set(worst_5_percent_indices[:, 1])
-combined_feature_indices = top_feature_indices.union(worst_feature_indices)
-combined_feature_indices = sorted(combined_feature_indices)  # Sort for consistency
-relevant_table = table[:, list(combined_feature_indices)]
-relevant_feature_names = [feature_names[i] for i in combined_feature_indices]
-plt.figure(figsize=(10, 8))
-sns.heatmap(relevant_table.T, annot=True, cmap='coolwarm', 
-            xticklabels=target_names, yticklabels=relevant_feature_names, 
-            annot_kws={"size": 6})
-plt.title("LDA's Most Important Coefficients")
+
+abs_df = coefficients_df.abs()
+
+# Find the top 10 columns based on the maximum absolute value in each column
+top_columns = abs_df.max().nlargest(10).index
+
+# Keep only those columns in the original DataFrame
+filtered_df = coefficients_df[top_columns]
+
+filtered_df_transposed = filtered_df.T
+
+# Set the aesthetics for the plots
+plt.figure(figsize=(15, 10))
+
+# Heatmap with inverted axes
+sns.heatmap(filtered_df, annot=True, cmap='coolwarm', cbar=True)
+plt.title('Heatmap of Top 10 Features (Inverted Axes)')
+plt.xlabel('Samples')
+plt.ylabel('Features')
+plt.tight_layout()
+plt.savefig(f'{save_path}/heatmap.png')
+plt.close()
+
+# Bar Plot
+plt.figure(figsize=(10, 6))
+filtered_df_transposed.plot(kind='bar')
+plt.title('Bar Plot of Top 10 Features')
+plt.xlabel('Features')
+plt.ylabel('Values')
 plt.xticks(rotation=90)
 plt.yticks(rotation=0)
-# Invert the y-axis to have genres at the top
-plt.gca().invert_yaxis()
+plt.legend(title='Features', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
-plt.show()
-plt.savefig('../../results/lda/important_coefficients.png') 
+plt.savefig(f'{save_path}/bar_plot.png')
+plt.close()

@@ -8,20 +8,35 @@ import os
 import pandas as pd
 from scipy.stats import chi2
 import warnings
-import csv 
 import seaborn as sns
+import argparse
+
 warnings.filterwarnings("ignore")
+
+# Set up argument parsing
+parser = argparse.ArgumentParser(description='DT Model Script')
+parser.add_argument('--input_dir', type=str, required=True, help='Directory for input data files')
+parser.add_argument('--output_dir', type=str, required=True, help='Directory to save results')
+parser.add_argument('--select_features', action='store_true', help='Whether to select specific features or use all')
+
+args = parser.parse_args()
+
+save_path = args.output_dir
+input_path = args.input_dir
+os.makedirs(save_path, exist_ok=True)
 
 # Define model 
 model = LogisticRegression(random_state=0, max_iter=1000, multi_class='multinomial')
-if os.path.exists('../../results/logistic_regression/best_hyperparameters.txt'):
+if os.path.exists(f'{save_path}/best_hyperparameters.txt'):
     # Load the best hyperparameters from the file
     loaded_params = {}
-    with open('../../results/logistic_regression/best_hyperparameters.txt', 'r') as f:
+    with open(f'{save_path}/best_hyperparameters.txt', 'r') as f:
         lines = f.readlines()
         best_score = float(lines[0].strip().split(': ')[1])
         for line in lines[2:]:
             param, value = line.strip().split(': ')
+            if param == "C":
+                value = float(value)
             loaded_params[param] = value
     # Use the loaded hyperparameters
     model.set_params(**loaded_params)
@@ -30,12 +45,34 @@ if os.path.exists('../../results/logistic_regression/best_hyperparameters.txt'):
 cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
 
 # Load the dataset
-X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt(f'{input_path}data.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}data.csv', delimiter=',', max_rows=1).size))
+y = np.loadtxt(f'{input_path}labels.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}labels.csv', delimiter=',', max_rows=1).size))
+
 
 # replace infinite values with the maximum finite value or the minimum finite value
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
 X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
+
+# Feauture Selection
+feature_names = np.loadtxt(f'{input_path}data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = feature_names[1:]
+target_names = np.loadtxt(f'{input_path}labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = target_names[1:]
+target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
+disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
+                    'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
+                    'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+if args.select_features:
+    features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+else:
+    features_to_keep_index = range(X.shape[1])
+    features_to_keep = feature_names
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+X = X[:,features_to_keep_index]
 
 # standardize the data
 standarizer = StandardScaler()
@@ -52,7 +89,7 @@ y_pred = model.predict(X)
 y_prob = model.predict_proba(X)
 
 # Hyperparameter Tuning with sklearn
-if not os.path.exists('../../results/logistic_regression/best_hyperparameters.txt'):
+if not os.path.exists(f'{save_path}/best_hyperparameters.txt'):
     grid = dict()
     grid['penalty'] = ['l1', 'l2', 'elasticnet', 'none']
     grid['solver'] = ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']
@@ -65,7 +102,7 @@ if not os.path.exists('../../results/logistic_regression/best_hyperparameters.tx
     best_score = results.best_score_
 
     # Save the best hyperparameters to a file
-    with open('../../results/logistic_regression/best_hyperparameters.txt', 'w') as f:
+    with open(f'{save_path}/best_hyperparameters.txt', 'w') as f:
         f.write('Mean Accuracy: %.3f\n' % best_score)
         f.write('Best Hyperparameters:\n')
         for param, value in best_params.items():
@@ -79,18 +116,11 @@ print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 # Interpretations
 os.makedirs('../../results/logistic_regression', exist_ok=True)
 
-# Define the feature names and target names
-feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
-feature_names = [feature.replace(' mean', '') for feature in feature_names]
-target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
-
 # Coefficients
 coefficients = model.coef_
-coefficients_df = pd.DataFrame(coefficients, columns=feature_names, index=target_names)
+coefficients_df = pd.DataFrame(coefficients, columns=features_to_keep, index=target_names)
 coefficinets_df_transposed = coefficients_df.T
-coefficients_df.to_csv('../../results/logistic_regression/coefficients.csv')
+coefficients_df.to_csv(f'{save_path}/coefficients.csv')
 
 # Design matrix 
 X_design = np.hstack([np.ones((X.shape[0], 1)), X])
@@ -119,10 +149,10 @@ for j in range(y_prob.shape[1]):
 logitParams = np.hstack([model.intercept_.reshape(-1, 1), model.coef_])
 wald_statistics = (logitParams / standard_errors) ** 2
 p_values = chi2.sf(wald_statistics, df=1)
-with open('../../results/logistic_regression/p_values_ward_test.csv', 'w') as f:
+with open(f'{save_path}/p_values_ward_test.csv', 'w') as f:
     f.write('Feature,Class,P-value\n')
     for i, target in enumerate(target_names):
-        for j, feature in enumerate(feature_names):
+        for j, feature in enumerate(features_to_keep):
             f.write(f'{feature},{target},{p_values[i, j]}\n')
             
 # Plot all coefficients
@@ -134,7 +164,8 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Class', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
-plt.savefig('../../results/logistic_regression/coefficients.png') 
+plt.savefig(f'{save_path}/coefficients.png') 
+plt.close()
 
 # Plot the most important coefficients based on the feature importance
 top_coefficients = np.argsort(np.mean(np.abs(coefficients), axis=0))[::-1]
@@ -149,7 +180,8 @@ plt.xticks(rotation=45, ha='right')
 plt.legend(title='Class', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True, linestyle='--', alpha=0.6)
 plt.tight_layout()
-plt.savefig('../../results/logistic_regression/important_coefficients.png') 
+plt.savefig(f'{save_path}/important_coefficients.png') 
+plt.close()
 
 # Plot the Effects
 def plot_effects(effects, feature_names, target_name, output_dir, important=False):
@@ -162,9 +194,9 @@ def plot_effects(effects, feature_names, target_name, output_dir, important=Fals
     plt.ylabel("Effect")
     plt.tight_layout()
     if important:
-        plt.savefig(os.path.join(output_dir, f'{target_name}_important_effects_boxplot.png'))
+        plt.savefig(os.path.join(save_path, f'{target_name}_important_effects_boxplot.png'))
     else:
-        plt.savefig(os.path.join(output_dir, f'{target_name}_effects_boxplot.png'))
+        plt.savefig(os.path.join(save_path, f'{target_name}_effects_boxplot.png'))
     plt.close()
 n_classes, n_features = coefficients.shape
 effects_dict = {}
@@ -174,11 +206,11 @@ for class_idx, class_name in enumerate(target_names):
     for feature_idx in range(n_features):
         if class_name not in effects_dict:
             effects_dict[class_name] = {}
-            if feature_names[feature_idx] not in effects_dict[class_name]:
-                effects_dict[class_name][feature_names[feature_idx]] = []
-        effects_dict[class_name][feature_names[feature_idx]] = effects_per_class[:, feature_idx]
+            if features_to_keep[feature_idx] not in effects_dict[class_name]:
+                effects_dict[class_name][features_to_keep[feature_idx]] = []
+        effects_dict[class_name][features_to_keep[feature_idx]] = effects_per_class[:, feature_idx]
 for class_name in target_names:
-    plot_effects(effects_dict, feature_names, class_name, '../../results/logistic_regression')
+    plot_effects(effects_dict, features_to_keep, class_name, '../../results/logistic_regression')
 
 # Plot the most important effects based on the feature importance
 top10_feauture_names = list(list(coeff_df_temp.to_dict().values())[0].keys())
@@ -201,46 +233,46 @@ ax.set_xticklabels(target_names)
 ax.set_yticklabels(target_names)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig('../../results/logistic_regression/confusion_matrix.png')  # Save as PNG file
-plt.show()
-
+plt.savefig(f'{save_path}/confusion_matrix.png')  # Save as PNG file
+plt.close()
 # Classification report
 class_report = classification_report(y, y_pred, target_names=target_names)
-with open('../../results/logistic_regression/classification_report.txt', 'w') as f:
+with open(f'{save_path}/classification_report.txt', 'w') as f:
     f.write("Classification Report:\n")
     f.write(class_report)
     
 # Plot the most important coefficients
-table = coefficients_df.iloc[:, 1:].to_numpy()
-flat_table = table.flatten()
-top_5_percent_threshold = np.percentile(flat_table, 95)
-worst_5_percent_threshold = np.percentile(flat_table, 5)
-top_5_percent_indices = np.argwhere(table >= top_5_percent_threshold)
-worst_5_percent_indices = np.argwhere(table <= worst_5_percent_threshold)
-with open('top_5_percent_pairs.csv', mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Row', 'Column', 'Value'])  # Header
-    for index in top_5_percent_indices:
-        writer.writerow([index[0], index[1], table[tuple(index)]])
-with open('worst_5_percent_pairs.csv', mode='w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['Row', 'Column', 'Value'])  # Header
-    for index in worst_5_percent_indices:
-        writer.writerow([index[0], index[1], table[tuple(index)]])
-top_feature_indices = set(top_5_percent_indices[:, 1])
-worst_feature_indices = set(worst_5_percent_indices[:, 1])
-combined_feature_indices = top_feature_indices.union(worst_feature_indices)
-combined_feature_indices = sorted(combined_feature_indices)  # Sort for consistency
-relevant_table = table[:, list(combined_feature_indices)]
-relevant_feature_names = [feature_names[i] for i in combined_feature_indices]
-plt.figure(figsize=(10, 8))
-sns.heatmap(relevant_table.T, annot=True, cmap='coolwarm', 
-            xticklabels=target_names, yticklabels=relevant_feature_names, 
-            annot_kws={"size": 6})
-plt.title("Logistic Regression's Most Important Coefficients")
-plt.xticks(rotation=0)
-plt.yticks(rotation=0)
-plt.gca().invert_yaxis()
+abs_df = coefficients_df.abs()
+
+# Find the top 10 columns based on the maximum absolute value in each column
+top_columns = abs_df.max().nlargest(10).index
+
+# Keep only those columns in the original DataFrame
+filtered_df = coefficients_df[top_columns]
+
+filtered_df_transposed = filtered_df.T
+
+# Set the aesthetics for the plots
+plt.figure(figsize=(15, 10))
+
+# Heatmap with inverted axes
+sns.heatmap(filtered_df, annot=True, cmap='coolwarm', cbar=True)
+plt.title('Heatmap of Top 10 Features (Inverted Axes)')
+plt.xlabel('Samples')
+plt.ylabel('Features')
 plt.tight_layout()
-plt.show()
-plt.savefig('../../results/logistic_regression/important_coefficients.png') 
+plt.savefig(f'{save_path}/heatmap.png')
+plt.close()
+
+# Bar Plot
+plt.figure(figsize=(10, 6))
+filtered_df_transposed.plot(kind='bar')
+plt.title('Bar Plot of Top 10 Features')
+plt.xlabel('Features')
+plt.ylabel('Values')
+plt.xticks(rotation=90)
+plt.yticks(rotation=0)
+plt.legend(title='Features', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.tight_layout()
+plt.savefig(f'{save_path}/bar_plot.png')
+plt.close()

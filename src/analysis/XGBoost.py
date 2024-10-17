@@ -13,18 +13,52 @@ import matplotlib.pyplot as plt
 import shap
 from sklearn.inspection import permutation_importance
 import os
+import argparse
+import warnings
+
+warnings.filterwarnings("ignore")
+
+# Set up argument parsing
+parser = argparse.ArgumentParser(description='DT Model Script')
+parser.add_argument('--input_dir', type=str, required=True, help='Directory for input data files')
+parser.add_argument('--output_dir', type=str, required=True, help='Directory to save results')
+parser.add_argument('--select_features', action='store_true', help='Whether to select specific features or use all')
+
+args = parser.parse_args()
+
+save_path = args.output_dir
+input_path = args.input_dir
+os.makedirs(save_path, exist_ok=True)
 
 # Load the dataset
-X = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=1)
-y = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=1)
+X = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}/data.csv', delimiter=',', max_rows=1).size))
+y = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}/labels.csv', delimiter=',', max_rows=1).size))
 y = np.argmax(y, axis=1)
 X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
 X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
-feature_names = np.loadtxt('../../dataset/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
-feature_names = [feature.replace('_', ' ').capitalize() for feature in list(feature_names)]
-feature_names = [feature.replace(' mean', '') for feature in feature_names]
-target_names = np.loadtxt('../../dataset/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+
+# Feauture Selection
+feature_names = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+feature_names = feature_names[1:]
+
+target_names = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
+target_names = target_names[1:]
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
+
+if args.select_features:
+    disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
+                        'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
+                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+    features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+else:
+    features_to_keep_index = range(len(feature_names))
+    features_to_keep = feature_names
+    features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
+    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+X = X[:,features_to_keep_index]
 
 xgb_estimator = xgb.XGBClassifier(max_depth=2,eta= 0.3,objective='multi:softmax',num_class=4,importance_type='weight')#,eval_metric='auc')
 xgb_estimator.fit(X, y,verbose=True)
@@ -36,7 +70,7 @@ print('Mean Accuracy: %.3f (%.3f)' % (np.mean(scores), np.std(scores)))
 # Classification report
 y_pred = xgb_estimator.predict(X)
 class_report = classification_report(y, y_pred, target_names=None)  # Optionally, provide target_names
-output_path = '../../results/xgboost/classification_report.txt'
+output_path = f'{save_path}/classification_report.txt'
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 with open(output_path, 'w') as f:
     f.write("Classification Report:\n")
@@ -59,13 +93,13 @@ ax.set_xticklabels(target_names, color='white')
 ax.set_yticklabels(target_names, color='white')
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-output_path = '../../results/xgboost/confusion_matrix.png'
+output_path = f'{save_path}/confusion_matrix.png'
 plt.savefig(output_path, dpi=300, bbox_inches='tight')
 plt.close()
 
 # Plot importance
 importance = xgb_estimator.get_booster().get_score(importance_type='weight')
-importance_dict = {feature_names[int(f[1:])]: score for f, score in importance.items()}
+importance_dict = {features_to_keep[int(f[1:])]: score for f, score in importance.items()}
 importance_df = pd.DataFrame(list(importance_dict.items()), columns=['Feature', 'Importance'])
 importance_df = importance_df.sort_values(by='Importance', ascending=False)
 plt.figure(figsize=(10, 8))
@@ -76,7 +110,7 @@ plt.yticks(fontsize=6)  # Set the font size of the y-axis tick labels (feature n
 plt.title('XGBoost Feature Importance')
 plt.gca().invert_yaxis()  # Invert the y-axis to show the most important feature at the top
 plt.tight_layout()
-plt.savefig('../../results/xgboost/feature_importance.png')
+plt.savefig(f'{save_path}/feature_importance.png')
 plt.close()
 
 # Top 10 plot
@@ -88,5 +122,5 @@ plt.ylabel('Feature')
 plt.title('Top 10 XGBoost Feature Importance')
 plt.gca().invert_yaxis()  # Invert the y-axis to show the most important feature at the top
 plt.tight_layout()
-plt.savefig('../../results/xgboost/top10_feature_importance.png')
+plt.savefig(f'{save_path}/top10_feature_importance.png')
 plt.close()
