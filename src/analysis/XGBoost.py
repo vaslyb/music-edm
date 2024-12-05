@@ -34,8 +34,6 @@ os.makedirs(save_path, exist_ok=True)
 X = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}/data.csv', delimiter=',', max_rows=1).size))
 y = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(f'{input_path}/labels.csv', delimiter=',', max_rows=1).size))
 y = np.argmax(y, axis=1)
-X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
-X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
 
 # Feauture Selection
 feature_names = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=0, dtype=str, max_rows=1)
@@ -48,7 +46,10 @@ target_names = [target.replace('_', ' ').capitalize() for target in list(target_
 if args.select_features:
     disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
                         'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
-                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean','mfcc6_mean','mfcc7_mean',
+                        'mfcc8_mean','mfcc9_mean','mfcc10_mean','mfcc11_mean','mfcc12_mean','mfcc13_mean','chord','chord_strength','chord_scale'
+                        ,'key','key_strength','spectral_rms_mean', 'meter','entropia_clarity','entropia_clarity_low','entropia_clarity_high',
+                        'entropia_clarity_middle']
     features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
@@ -58,9 +59,10 @@ else:
     features_to_keep = feature_names
     features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
     features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+print(features_to_keep)
 X = X[:,features_to_keep_index]
 
-xgb_estimator = xgb.XGBClassifier(max_depth=2,eta= 0.3,objective='multi:softmax',num_class=4,importance_type='weight')#,eval_metric='auc')
+xgb_estimator = xgb.XGBClassifier(max_depth=2,eta= 0.3,objective='multi:softmax',num_class=4,importance_type='weight')
 xgb_estimator.fit(X, y,verbose=True)
 
 cv = 5  # Number of cross-validation folds
@@ -78,23 +80,23 @@ with open(output_path, 'w') as f:
     
 # Confusion matrix
 conf_matrix = confusion_matrix(y, y_pred)
-fig, ax = plt.subplots(figsize=(8, 6))
-cax = ax.matshow(conf_matrix, cmap='Greys')  # Using 'Greys' for the confusion matrix
+conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis] * 100
+conf_matrix_percentage = np.round(conf_matrix_normalized).astype(int)
+fig, ax = plt.subplots(figsize=(10, 8))  # Change the proportions here
+cax = ax.matshow(conf_matrix_percentage, cmap='Greys', aspect='auto')  # Set aspect to auto for better proportioning
 plt.colorbar(cax)
-ax.set_xlabel('Predicted Label', color='white')
-ax.set_ylabel('True Label', color='white')
-for i in range(conf_matrix.shape[0]):
-    for j in range(conf_matrix.shape[1]):
-        ax.text(j, i, conf_matrix[i, j], ha='center', va='center', color='black' if conf_matrix[i, j] < conf_matrix.max() / 2 else 'white')
-target_names = [f'Class {i}' for i in range(conf_matrix.shape[0])]  # Modify this if you have actual target names
+ax.set_xlabel('Predicted Label', fontsize=12)
+ax.set_ylabel('True Label', fontsize=12)
+for i in range(len(target_names)):
+    for j in range(len(target_names)):
+        ax.text(j, i, f'{conf_matrix_percentage[i, j]:}%', ha='center', va='center', fontsize=16, color='black' if i!=j else 'white')
 ax.set_xticks(np.arange(len(target_names)))
 ax.set_yticks(np.arange(len(target_names)))
-ax.set_xticklabels(target_names, color='white')
-ax.set_yticklabels(target_names, color='white')
+ax.set_xticklabels(target_names,fontsize=14)
+ax.set_yticklabels(target_names,fontsize=14)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-output_path = f'{save_path}/confusion_matrix.png'
-plt.savefig(output_path, dpi=300, bbox_inches='tight')
+plt.savefig(f'{save_path}/confusion_matrix.png')  # Save as PNG file
 plt.close()
 
 # Plot importance

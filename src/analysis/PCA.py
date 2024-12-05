@@ -32,10 +32,6 @@ labels_file = os.path.join(args.input_dir, 'labels.csv')
 X = np.loadtxt(data_file, delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(data_file, delimiter=',', max_rows=1).size))
 y = np.loadtxt(labels_file, delimiter=',', skiprows=1, usecols=range(1, np.genfromtxt(labels_file, delimiter=',', max_rows=1).size))
 
-# Replace infinite values with the maximum finite value or the minimum finite value
-X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
-X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
-
 # Transform one hot encoded labels to integers
 y = np.argmax(y, axis=1)
 
@@ -50,7 +46,14 @@ target_names = [target.replace('_', ' ').capitalize() for target in list(target_
 if args.select_features:
     disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
                         'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
-                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean','mfcc6_mean','mfcc7_mean',
+                        'mfcc8_mean','mfcc9_mean','mfcc10_mean','mfcc11_mean','mfcc12_mean','mfcc13_mean','chord','chord_strength','chord_scale'
+                        ,'key','key_strength']
+    # disgard_features_2 = ['chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
+    #                       'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean',
+    #                       'spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean',
+    #                       'pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
+    #                       'spectral_flux_mean','danceability']
     features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
 else:
@@ -101,7 +104,7 @@ loadings = pd.DataFrame(pca.components_, columns=df.columns)
 loadings.to_csv(os.path.join(save_path, 'loadings.csv'), index=False)
 
 # Group significant features for each component
-loading_threshold = 0.3
+loading_threshold = 0.2
 component_groups = {}
 
 for i in range(loadings.shape[0]):

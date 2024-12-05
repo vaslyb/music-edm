@@ -40,15 +40,14 @@ num_labels = len(target_names)
 X = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=1, usecols=range(1, num_features+1))
 y = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=1, usecols=range(1, num_labels+1))
 
-# Replace infinite values with the maximum finite value or the minimum finite value
-X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
-X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
-
 # Feauture Selection
 target_names = [target.replace('_', ' ').capitalize() for target in list(target_names)]
 disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
                     'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
-                    'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+                    'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean','mfcc6_mean','mfcc7_mean',
+                    'mfcc8_mean','mfcc9_mean','mfcc10_mean','mfcc11_mean','mfcc12_mean','mfcc13_mean','chord','chord_strength','chord_scale'
+                    ,'key','key_strength','spectral_rms_mean', 'meter','entropia_clarity','entropia_clarity_low','entropia_clarity_high',
+                    'entropia_clarity_middle']
 if args.select_features:
     features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
@@ -96,22 +95,24 @@ coefficients_df.to_csv(save_path+'/coefficients.csv')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
-fig, ax = plt.subplots(figsize=(8, 6))
-cax = ax.matshow(conf_matrix, cmap='Blues')
+conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis] * 100
+conf_matrix_percentage = np.round(conf_matrix_normalized).astype(int)
+fig, ax = plt.subplots(figsize=(10, 8))  # Change the proportions here
+cax = ax.matshow(conf_matrix_percentage, cmap='Reds', aspect='auto')  # Set aspect to auto for better proportioning
 plt.colorbar(cax)
-ax.set_xlabel('Predicted Label')
-ax.set_ylabel('True Label')
+ax.set_xlabel('Predicted Label', fontsize=12)
+ax.set_ylabel('True Label', fontsize=12)
 for i in range(len(target_names)):
     for j in range(len(target_names)):
-        ax.text(j, i, conf_matrix[i, j], ha='center', va='center', color='black')
+        ax.text(j, i, f'{conf_matrix_percentage[i, j]:}%', ha='center', va='center', color='black' if conf_matrix[i, j] < conf_matrix.max() / 2 else 'white', fontsize=16)
 ax.set_xticks(np.arange(len(target_names)))
 ax.set_yticks(np.arange(len(target_names)))
-ax.set_xticklabels(target_names)
-ax.set_yticklabels(target_names)
+ax.set_xticklabels(target_names,fontsize=14)
+ax.set_yticklabels(target_names,fontsize=14)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
 plt.savefig(f'{save_path}/confusion_matrix.png')  # Save as PNG file
-plt.show()
+plt.close()
 
 # Classification report
 class_report = classification_report(y, y_pred)

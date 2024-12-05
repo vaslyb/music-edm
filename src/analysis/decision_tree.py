@@ -54,9 +54,6 @@ num_labels = len(target_names)
 X = np.loadtxt(f'{input_path}/data.csv', delimiter=',', skiprows=1, usecols=range(1, num_features+1))
 y = np.loadtxt(f'{input_path}/labels.csv', delimiter=',', skiprows=1, usecols=range(1, num_labels+1))
 
-X = np.where(np.isposinf(X), np.nanmax(X[np.isfinite(X)]), X)
-X = np.where(np.isneginf(X), np.nanmin(X[np.isfinite(X)]), X)
-
 # Transform one hot encoded labels to integers
 y = np.argmax(y, axis=1)
 
@@ -65,11 +62,14 @@ target_names = [target.replace('_', ' ').capitalize() for target in list(target_
 if args.select_features:
     disgard_features = ['spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
                         'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
-                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean']
+                        'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean','mfcc6_mean','mfcc7_mean',
+                        'mfcc8_mean','mfcc9_mean','mfcc10_mean','mfcc11_mean','mfcc12_mean','mfcc13_mean','chord','chord_strength','chord_scale'
+                        ,'key','key_strength','spectral_rms_mean', 'meter','entropia_clarity','entropia_clarity_low','entropia_clarity_high',
+                        'entropia_clarity_middle']
     features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature.replace('_', ' ').capitalize() for feature in list(features_to_keep)]
-    features_to_keep = [feature.replace(' mean', '') for feature in features_to_keep]
+    features_to_keep = [feature.replace(' meeasure the quality of a split. Supportean', '') for feature in features_to_keep]
 else:
     features_to_keep_index = range(num_features)
     features_to_keep = feature_names
@@ -87,10 +87,9 @@ y_prob = model.predict_proba(X)
 # Hyperparameter Tuning with sklearn
 if not os.path.exists(f'{save_path}/best_hyperparameters.txt'):
     grid = dict()
-    grid['criterion'] = ['gini', 'entropy']
     grid['max_depth'] = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     grid['min_samples_split'] = [2, 5, 10]
-    grid['ccp_alpha'] = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+    # grid['ccp_alpha'] = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
     search = GridSearchCV(model, grid, scoring='accuracy', cv=cv, n_jobs=-1)
     results = search.fit(X, y)
     best_params = results.best_params_
@@ -148,22 +147,24 @@ plt.savefig(f'{save_path}/top10_feature_importances.png')
 
 # Confusion Matrix
 conf_matrix = confusion_matrix(y, y_pred)
-fig, ax = plt.subplots(figsize=(8, 6))
-cax = ax.matshow(conf_matrix, cmap='YlGn')
+conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis] * 100
+conf_matrix_percentage = np.round(conf_matrix_normalized).astype(int)
+fig, ax = plt.subplots(figsize=(10, 8))  # Change the proportions here
+cax = ax.matshow(conf_matrix_percentage, cmap='YlGn', aspect='auto')  # Set aspect to auto for better proportioning
 plt.colorbar(cax)
-ax.set_xlabel('Predicted Label')
-ax.set_ylabel('True Label')
+ax.set_xlabel('Predicted Label', fontsize=12)
+ax.set_ylabel('True Label', fontsize=12)
 for i in range(len(target_names)):
     for j in range(len(target_names)):
-        ax.text(j, i, conf_matrix[i, j], ha='center', va='center', color='black')
+        ax.text(j, i, f'{conf_matrix_percentage[i, j]:}%', ha='center', va='center', color='black' if conf_matrix[i, j] < conf_matrix.max() / 2 else 'white', fontsize=16)
 ax.set_xticks(np.arange(len(target_names)))
 ax.set_yticks(np.arange(len(target_names)))
-ax.set_xticklabels(target_names)
-ax.set_yticklabels(target_names)
+ax.set_xticklabels(target_names,fontsize=14)
+ax.set_yticklabels(target_names,fontsize=14)
 plt.xticks(rotation=90, ha='right')
 plt.tight_layout()
-plt.savefig(f'{save_path}/confusion_matrix.png')  
-plt.show()
+plt.savefig(f'{save_path}/confusion_matrix.png')  # Save as PNG file
+plt.close()
 
 # Post pruning analysis
 
@@ -225,7 +226,15 @@ plt.savefig(f'{save_path}/accuracy_vs_alpha.png')
 # Keep the best model according to test set and save it
 
 best_model_index = np.argmax(test_scores)
-best_model = models[best_model_index]
+best_alpha = ccp_alphas[best_model_index]
+
+print(best_alpha)
+
+best_model = DecisionTreeClassifier(random_state=0, ccp_alpha=best_alpha, max_depth=int(best_params['max_depth']),min_samples_split=int(best_params['min_samples_split']))
+
+best_model.fit(X, y)
+
+y_pred = best_model.predict(X)
 
 dot_data = export_graphviz(
     best_model, 
@@ -241,8 +250,41 @@ dot_data = export_graphviz(
 graph = graphviz.Source(dot_data)
 graph.render(f'{save_path}/best_decision_tree', format='png', cleanup=True)
 
+importances = best_model.feature_importances_
+top10 = np.argsort(importances)[::-1][:10]
+top10_features = [features_to_keep[i] for i in top10][::-1]
+top10_importances = importances[top10][::-1]
+plt.figure(figsize=(10, 6))
+plt.barh(top10_features, top10_importances, color='maroon')
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.title('Top 10 Feature Importances')
+plt.tight_layout()
+plt.savefig(f'{save_path}/best_top10_feature_importances.png')
+
 # Classification report
 class_report = classification_report(y, y_pred, target_names=target_names)
-with open(f'{save_path}/classification_report.txt', 'w') as f:
+with open(f'{save_path}/best_classification_report.txt', 'w') as f:
     f.write("Classification Report:\n")
     f.write(class_report)
+    
+# Confusion Matrix
+conf_matrix = confusion_matrix(y, y_pred)
+conf_matrix_normalized = conf_matrix.astype('float') / conf_matrix.sum(axis=1)[:, np.newaxis] * 100
+conf_matrix_percentage = np.round(conf_matrix_normalized).astype(int)
+fig, ax = plt.subplots(figsize=(10, 8))  # Change the proportions here
+cax = ax.matshow(conf_matrix_percentage, cmap='YlGn', aspect='auto')  # Set aspect to auto for better proportioning
+plt.colorbar(cax)
+ax.set_xlabel('Predicted Label', fontsize=12)
+ax.set_ylabel('True Label', fontsize=12)
+for i in range(len(target_names)):
+    for j in range(len(target_names)):
+        ax.text(j, i, f'{conf_matrix_percentage[i, j]:}%', ha='center', va='center', color='black' if conf_matrix[i, j] < conf_matrix.max() / 2 else 'white', fontsize=16)
+ax.set_xticks(np.arange(len(target_names)))
+ax.set_yticks(np.arange(len(target_names)))
+ax.set_xticklabels(target_names,fontsize=14)
+ax.set_yticklabels(target_names,fontsize=14)
+plt.xticks(rotation=90, ha='right')
+plt.tight_layout()
+plt.savefig(f'{save_path}/best_confusion_matrix.png')  # Save as PNG file
+plt.close()
