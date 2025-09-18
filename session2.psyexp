@@ -1,0 +1,820 @@
+﻿<?xml version="1.0" ?>
+<PsychoPy2experiment encoding="utf-8" version="2024.1.4">
+  <Settings>
+    <Param val="1" valType="str" updates="None" name="Audio latency priority"/>
+    <Param val="ptb" valType="str" updates="None" name="Audio lib"/>
+    <Param val="" valType="str" updates="None" name="Completed URL"/>
+    <Param val="auto" valType="str" updates="None" name="Data file delimiter"/>
+    <Param val="u'data/%s_%s_%s' % (expInfo['Participant ID'], expName, expInfo['date'])" valType="code" updates="None" name="Data filename"/>
+    <Param val="True" valType="bool" updates="None" name="Enable Escape"/>
+    <Param val="" valType="str" updates="None" name="End Message"/>
+    <Param val="{'Expert ID': ''}" valType="code" updates="None" name="Experiment info"/>
+    <Param val="True" valType="bool" updates="None" name="Force stereo"/>
+    <Param val="True" valType="bool" updates="None" name="Full-screen window"/>
+    <Param val="" valType="str" updates="None" name="HTML path"/>
+    <Param val="" valType="str" updates="None" name="Incomplete URL"/>
+    <Param val="testMonitor" valType="str" updates="None" name="Monitor"/>
+    <Param val="[]" valType="list" updates="None" name="Resources"/>
+    <Param val="False" valType="bool" updates="None" name="Save csv file"/>
+    <Param val="False" valType="bool" updates="None" name="Save excel file"/>
+    <Param val="False" valType="bool" updates="None" name="Save hdf5 file"/>
+    <Param val="False" valType="bool" updates="None" name="Save log file"/>
+    <Param val="True" valType="bool" updates="None" name="Save psydat file"/>
+    <Param val="True" valType="bool" updates="None" name="Save wide csv file"/>
+    <Param val="1" valType="num" updates="None" name="Screen"/>
+    <Param val="True" valType="bool" updates="None" name="Show info dlg"/>
+    <Param val="False" valType="bool" updates="None" name="Show mouse"/>
+    <Param val="height" valType="str" updates="None" name="Units"/>
+    <Param val="" valType="str" updates="None" name="Use version"/>
+    <Param val="[1280, 720]" valType="list" updates="None" name="Window size (pixels)"/>
+    <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+    <Param val="" valType="str" updates="None" name="backgroundImg"/>
+    <Param val="avg" valType="str" updates="None" name="blendMode"/>
+    <Param val="float" valType="str" updates="None" name="clockFormat"/>
+    <Param val="{'thisRow.t': 'priority.CRITICAL', 'expName': 'priority.LOW'}" valType="dict" updates="None" name="colPriority"/>
+    <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="None" name="color"/>
+    <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+    <Param val="100.1.1.1" valType="str" updates="None" name="elAddress"/>
+    <Param val="FILTER_LEVEL_2" valType="str" updates="None" name="elDataFiltering"/>
+    <Param val="FILTER_LEVEL_OFF" valType="str" updates="None" name="elLiveFiltering"/>
+    <Param val="EYELINK 1000 DESKTOP" valType="str" updates="None" name="elModel"/>
+    <Param val="ELLIPSE_FIT" valType="str" updates="None" name="elPupilAlgorithm"/>
+    <Param val="PUPIL_AREA" valType="str" updates="None" name="elPupilMeasure"/>
+    <Param val="1000" valType="num" updates="None" name="elSampleRate"/>
+    <Param val="False" valType="bool" updates="None" name="elSimMode"/>
+    <Param val="RIGHT_EYE" valType="str" updates="None" name="elTrackEyes"/>
+    <Param val="PUPIL_CR_TRACKING" valType="str" updates="None" name="elTrackingMode"/>
+    <Param val="experiment1" valType="str" updates="None" name="expName"/>
+    <Param val="on Sync" valType="str" updates="None" name="exportHTML"/>
+    <Param val="None" valType="str" updates="None" name="eyetracker"/>
+    <Param val="" valType="code" updates="None" name="frameRate"/>
+    <Param val="Attempting to measure frame rate of screen, please wait..." valType="str" updates="None" name="frameRateMsg"/>
+    <Param val="127.0.0.1" valType="str" updates="None" name="gpAddress"/>
+    <Param val="4242" valType="num" updates="None" name="gpPort"/>
+    <Param val="ioHub" valType="str" updates="None" name="keyboardBackend"/>
+    <Param val="exp" valType="code" updates="None" name="logging level"/>
+    <Param val="False" valType="bool" updates="None" name="measureFrameRate"/>
+    <Param val="('MIDDLE_BUTTON',)" valType="list" updates="None" name="mgBlink"/>
+    <Param val="CONTINUOUS" valType="str" updates="None" name="mgMove"/>
+    <Param val="0.5" valType="num" updates="None" name="mgSaccade"/>
+    <Param val="neon.local" valType="str" updates="None" name="plCompanionAddress"/>
+    <Param val="8080" valType="num" updates="None" name="plCompanionPort"/>
+    <Param val="True" valType="bool" updates="None" name="plCompanionRecordingEnabled"/>
+    <Param val="0.6" valType="num" updates="None" name="plConfidenceThreshold"/>
+    <Param val="True" valType="bool" updates="None" name="plPupilCaptureRecordingEnabled"/>
+    <Param val="" valType="str" updates="None" name="plPupilCaptureRecordingLocation"/>
+    <Param val="127.0.0.1" valType="str" updates="None" name="plPupilRemoteAddress"/>
+    <Param val="50020" valType="num" updates="None" name="plPupilRemotePort"/>
+    <Param val="1000" valType="num" updates="None" name="plPupilRemoteTimeoutMs"/>
+    <Param val="False" valType="bool" updates="None" name="plPupillometryOnly"/>
+    <Param val="psychopy_iohub_surface" valType="str" updates="None" name="plSurfaceName"/>
+    <Param val="0" valType="code" updates="None" name="runMode"/>
+    <Param val="False" valType="bool" updates="None" name="rush"/>
+    <Param val="time" valType="str" updates="None" name="sortColumns"/>
+    <Param val="" valType="str" updates="None" name="tbLicenseFile"/>
+    <Param val="" valType="str" updates="None" name="tbModel"/>
+    <Param val="60" valType="num" updates="None" name="tbSampleRate"/>
+    <Param val="" valType="str" updates="None" name="tbSerialNo"/>
+    <Param val="pyglet" valType="str" updates="None" name="winBackend"/>
+  </Settings>
+  <Routines>
+    <Routine name="Welcome">
+      <RoutineSettingsComponent name="Welcome" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="Welcome" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <TextComponent name="textWelcome" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.045" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textWelcome" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Welcome back, expert!&amp;#10;&amp;#10;For this survey, you are kindly reminded that you need to wear headphones. Please, make sure that you have adjusted the sound to a comfortable level before you begin." valType="str" updates="constant" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <ButtonComponent name="buttonContinue_Welcome" plugin="None">
+        <Param val="bottom-center" valType="str" updates="constant" name="anchor"/>
+        <Param val="True" valType="bool" updates="constant" name="bold"/>
+        <Param val="None" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0" valType="num" updates="constant" name="borderWidth"/>
+        <Param val="" valType="extendedCode" updates="constant" name="callback"/>
+        <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="Arvo" valType="str" updates="constant" name="font"/>
+        <Param val="True" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="False" valType="bool" updates="constant" name="italic"/>
+        <Param val="0.03" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="buttonContinue_Welcome" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="oncePerClick"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="" valType="num" updates="constant" name="padding"/>
+        <Param val="(0, -0.45)" valType="list" updates="constant" name="pos"/>
+        <Param val="none" valType="str" updates="None" name="save"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.2, 0.06)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="1" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Continue" valType="str" updates="constant" name="text"/>
+        <Param val="button onset" valType="str" updates="constant" name="timeRelativeTo"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ButtonComponent>
+      <MouseComponent name="mouseWelcome" plugin="None">
+        <Param val="buttonContinue_Welcome" valType="list" updates="constant" name="clickable"/>
+        <Param val="" valType="list" updates="constant" name="correctAns"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="correct click" valType="str" updates="constant" name="forceEndRoutineOnPress"/>
+        <Param val="mouseWelcome" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="newClicksOnly"/>
+        <Param val="never" valType="str" updates="None" name="saveMouseState"/>
+        <Param val="name," valType="list" updates="constant" name="saveParamsClickable"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
+        <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="routine" valType="str" updates="constant" name="timeRelativeTo"/>
+      </MouseComponent>
+    </Routine>
+    <Routine name="Instructions">
+      <RoutineSettingsComponent name="Instructions" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="Instructions" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <TextComponent name="textInstructions" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.045" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textInstructions" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="In this session, you will be presented with 200 30-second song excerpts and ashed to decide how much they represent:&amp;#10;psytrance&amp;#10;minimal techno&amp;#10;progressive house&amp;#10;dubstep&amp;#10;&amp;#10;The session consists of 10 blocks of 20 songs, with free breaks in between.&amp;#10;&amp;#10;When the song starts playing, use your mouse to move the dot on the slider according to your judgment. Then, click the continue button to listen to the next song.&amp;#10;&amp;#10;Please, make judgments based on your knowledge about these subgenres and not your personal preferences on EDM." valType="str" updates="constant" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="1.65" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <ButtonComponent name="buttonContinue_Instructions" plugin="None">
+        <Param val="bottom-center" valType="str" updates="constant" name="anchor"/>
+        <Param val="True" valType="bool" updates="constant" name="bold"/>
+        <Param val="None" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0" valType="num" updates="constant" name="borderWidth"/>
+        <Param val="" valType="extendedCode" updates="constant" name="callback"/>
+        <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="Arvo" valType="str" updates="constant" name="font"/>
+        <Param val="True" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="False" valType="bool" updates="constant" name="italic"/>
+        <Param val="0.03" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="buttonContinue_Instructions" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="oncePerClick"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="" valType="num" updates="constant" name="padding"/>
+        <Param val="(0, -0.46)" valType="list" updates="constant" name="pos"/>
+        <Param val="none" valType="str" updates="None" name="save"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.2, 0.06)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="1" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Continue" valType="str" updates="constant" name="text"/>
+        <Param val="button onset" valType="str" updates="constant" name="timeRelativeTo"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ButtonComponent>
+      <MouseComponent name="mouseInstructions" plugin="None">
+        <Param val="buttonContinue_Instructions" valType="list" updates="constant" name="clickable"/>
+        <Param val="" valType="list" updates="constant" name="correctAns"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="correct click" valType="str" updates="constant" name="forceEndRoutineOnPress"/>
+        <Param val="mouseInstructions" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="newClicksOnly"/>
+        <Param val="never" valType="str" updates="None" name="saveMouseState"/>
+        <Param val="name," valType="list" updates="constant" name="saveParamsClickable"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
+        <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="routine" valType="str" updates="constant" name="timeRelativeTo"/>
+      </MouseComponent>
+    </Routine>
+    <Routine name="Goodbye">
+      <RoutineSettingsComponent name="Goodbye" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="Goodbye" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <TextComponent name="textGoodbye" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.045" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textGoodbye" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="10" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Thank you for your time and help!&amp;#10;&amp;#10;Click the button to exit." valType="str" updates="constant" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <ButtonComponent name="buttonExit" plugin="None">
+        <Param val="bottom-center" valType="str" updates="constant" name="anchor"/>
+        <Param val="True" valType="bool" updates="constant" name="bold"/>
+        <Param val="None" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0" valType="num" updates="constant" name="borderWidth"/>
+        <Param val="" valType="extendedCode" updates="constant" name="callback"/>
+        <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="Arvo" valType="str" updates="constant" name="font"/>
+        <Param val="True" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="False" valType="bool" updates="constant" name="italic"/>
+        <Param val="0.03" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="buttonExit" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="oncePerClick"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="" valType="num" updates="constant" name="padding"/>
+        <Param val="(0, -0.45)" valType="list" updates="constant" name="pos"/>
+        <Param val="none" valType="str" updates="None" name="save"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.2, 0.06)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="10" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Exit" valType="str" updates="constant" name="text"/>
+        <Param val="button onset" valType="str" updates="constant" name="timeRelativeTo"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ButtonComponent>
+      <MouseComponent name="mouseGoodbye" plugin="None">
+        <Param val="buttonExit" valType="list" updates="constant" name="clickable"/>
+        <Param val="" valType="list" updates="constant" name="correctAns"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="correct click" valType="str" updates="constant" name="forceEndRoutineOnPress"/>
+        <Param val="mouseGoodbye" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="newClicksOnly"/>
+        <Param val="never" valType="str" updates="None" name="saveMouseState"/>
+        <Param val="name," valType="list" updates="constant" name="saveParamsClickable"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="10" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
+        <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="routine" valType="str" updates="constant" name="timeRelativeTo"/>
+      </MouseComponent>
+    </Routine>
+    <Routine name="Trial">
+      <RoutineSettingsComponent name="Trial" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="Trial" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <CodeComponent name="codeMusicJS" plugin="None">
+        <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="&amp;#10;&amp;#10;  " valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
+        <Param val="// create and play the music&amp;#10;sndMusic = new sound.Sound({&amp;#10;      win: psychoJS.window,&amp;#10;      value: 'A',&amp;#10;      secs: (- 1),&amp;#10;      });&amp;#10;sndMusic.setVolume(1.0);&amp;#10;&amp;#10;sndMusic.setValue(audioFile);&amp;#10;sndMusic.setVolume(1.0);&amp;#10;sndMusic.play(-1);&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
+        <Param val="# NOTE: python and JS are NOT linked in this code block&amp;#10;#       any changes made to one side will not affect the other&amp;#10;&amp;#10;# define the undefined parameter in python&amp;#10;undefined = None&amp;#10;&amp;#10;# create and play the music&amp;#10;sndMusic = sound.Sound(&amp;#10;    'A', &amp;#10;    secs=-1, &amp;#10;    stereo=True, &amp;#10;    hamming=True, &amp;#10;    speaker='sndMusic',    name='sndMusic'&amp;#10;)&amp;#10;sndMusic.setVolume(1.0)&amp;#10;&amp;#10;sndMusic.setSound(audioFile, hamming=True)&amp;#10;sndMusic.setVolume(1.0, log=False)&amp;#10;sndMusic.seek(0)&amp;#10;sndMusic.play(-1)&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="Both" valType="str" updates="None" name="Code Type"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End JS Experiment"/>
+        <Param val="// stop the music&amp;#10;sndMusic.stop();" valType="extendedCode" updates="constant" name="End JS Routine"/>
+        <Param val="# stop the music&amp;#10;sndMusic.pause()" valType="extendedCode" updates="constant" name="End Routine"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="codeMusicJS" valType="code" updates="None" name="name"/>
+      </CodeComponent>
+      <CodeComponent name="codeTrial" plugin="None">
+        <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
+        <Param val="sliderMoved = false;&amp;#10;continueClicked = false;&amp;#10;trial_msg = ((&quot;How representative is this song of\n&quot; + genre.toString()) + &quot;?&quot;);&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
+        <Param val="sliderMoved = False&amp;#10;continueClicked = False&amp;#10;&amp;#10;# setup the trial message&amp;#10;trial_msg = &quot;How representative is this song of\n&quot; + str(genre) + &quot;?&quot;" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="Auto-&gt;JS" valType="str" updates="None" name="Code Type"/>
+        <Param val="# Check if the slider has been moved&amp;#10;if slider.getRating() != undefined:&amp;#10;    sliderMoved = True&amp;#10;&amp;#10;# Check if the continue button is clicked and the slider has been moved&amp;#10;if mouseTrial.isPressedIn(buttonContinue_Trial) and sliderMoved:&amp;#10;    continueClicked = True&amp;#10;    continueRoutine = False&amp;#10;" valType="extendedCode" updates="constant" name="Each Frame"/>
+        <Param val="if ((slider.getRating() !== undefined)) {&amp;#10;    sliderMoved = true;&amp;#10;}&amp;#10;if ((mouseTrial.isPressedIn(buttonContinue_Trial) &amp;&amp; sliderMoved)) {&amp;#10;    continueClicked = true;&amp;#10;    continueRoutine = false;&amp;#10;}&amp;#10;" valType="extendedCode" updates="constant" name="Each JS Frame"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End JS Experiment"/>
+        <Param val="skip_break = true;&amp;#10;if (((((trials.thisN % 20) === 19) &amp;&amp; (trials.thisN !== 0)) &amp;&amp; (trials.thisN !== 199))) {&amp;#10;    skip_break = false;&amp;#10;    console.log(&quot;Break time! Showing break screen.&quot;);&amp;#10;}&amp;#10;" valType="extendedCode" updates="constant" name="End JS Routine"/>
+        <Param val="skip_break = True # assume no break&amp;#10;&amp;#10;# every 20 trials activate a break&amp;#10;if trials.thisN % 20 == 19 and trials.thisN != 0 and trials.thisN != 199:&amp;#10;    skip_break = False&amp;#10;    print(&quot;Break time! Showing break screen.&quot;)" valType="extendedCode" updates="constant" name="End Routine"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="codeTrial" valType="code" updates="None" name="name"/>
+      </CodeComponent>
+      <TextComponent name="textTrial" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.05" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textTrial" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0.27)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="$trial_msg" valType="str" updates="set every repeat" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <SliderComponent name="slider" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="False" valType="bool" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="False" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="1" valType="num" updates="constant" name="granularity"/>
+        <Param val="0" valType="code" updates="None" name="initVal"/>
+        <Param val="['0', '100']" valType="list" updates="constant" name="labels"/>
+        <Param val="0.04" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="slider" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, -0.25)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="constant" name="readOnly"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(1.0, 0.08)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeHistory"/>
+        <Param val="True" valType="bool" updates="constant" name="storeRating"/>
+        <Param val="True" valType="bool" updates="constant" name="storeRatingTime"/>
+        <Param val="()" valType="list" updates="constant" name="styleTweaks"/>
+        <Param val="rating" valType="str" updates="constant" name="styles"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="(0,100)" valType="list" updates="constant" name="ticks"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </SliderComponent>
+      <ImageComponent name="imageTrial" plugin="None">
+        <Param val="center" valType="str" updates="constant" name="anchor"/>
+        <Param val="$[1,1,1]" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="False" valType="bool" updates="constant" name="flipHoriz"/>
+        <Param val="False" valType="bool" updates="constant" name="flipVert"/>
+        <Param val="headphones.png" valType="file" updates="constant" name="image"/>
+        <Param val="linear" valType="str" updates="constant" name="interpolate"/>
+        <Param val="" valType="str" updates="constant" name="mask"/>
+        <Param val="imageTrial" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.4, 0.4)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="128" valType="num" updates="constant" name="texture resolution"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ImageComponent>
+      <SoundComponent name="soundTrial" plugin="None">
+        <Param val="" valType="str" updates="None" name="deviceLabel"/>
+        <Param val="True" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="True" valType="bool" updates="constant" name="hamming"/>
+        <Param val="soundTrial" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="$audioFile" valType="str" updates="set every repeat" name="sound"/>
+        <Param val="8.0" valType="code" updates="None" name="speakerIndex"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="constant" name="stopWithRoutine"/>
+        <Param val="True" valType="bool" updates="constant" name="syncScreenRefresh"/>
+        <Param val="1" valType="num" updates="constant" name="volume"/>
+      </SoundComponent>
+      <ButtonComponent name="buttonContinue_Trial" plugin="None">
+        <Param val="bottom-center" valType="str" updates="constant" name="anchor"/>
+        <Param val="True" valType="bool" updates="constant" name="bold"/>
+        <Param val="None" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0" valType="num" updates="constant" name="borderWidth"/>
+        <Param val="" valType="extendedCode" updates="constant" name="callback"/>
+        <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="Arvo" valType="str" updates="constant" name="font"/>
+        <Param val="False" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="False" valType="bool" updates="constant" name="italic"/>
+        <Param val="0.03" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="buttonContinue_Trial" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="oncePerClick"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="" valType="num" updates="constant" name="padding"/>
+        <Param val="(0, -0.45)" valType="list" updates="constant" name="pos"/>
+        <Param val="none" valType="str" updates="None" name="save"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.2, 0.06)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (frames)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Continue" valType="str" updates="constant" name="text"/>
+        <Param val="button onset" valType="str" updates="constant" name="timeRelativeTo"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ButtonComponent>
+      <MouseComponent name="mouseTrial" plugin="None">
+        <Param val="buttonContinue_Trial" valType="list" updates="constant" name="clickable"/>
+        <Param val="" valType="list" updates="constant" name="correctAns"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="never" valType="str" updates="constant" name="forceEndRoutineOnPress"/>
+        <Param val="mouseTrial" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="newClicksOnly"/>
+        <Param val="never" valType="str" updates="None" name="saveMouseState"/>
+        <Param val="name," valType="list" updates="constant" name="saveParamsClickable"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
+        <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="routine" valType="str" updates="constant" name="timeRelativeTo"/>
+      </MouseComponent>
+    </Routine>
+    <Routine name="Break">
+      <RoutineSettingsComponent name="Break" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="Break" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="skip_break" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <ImageComponent name="imageBreak" plugin="None">
+        <Param val="center" valType="str" updates="constant" name="anchor"/>
+        <Param val="$[1,1,1]" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="False" valType="bool" updates="constant" name="flipHoriz"/>
+        <Param val="False" valType="bool" updates="constant" name="flipVert"/>
+        <Param val="coffee.png" valType="file" updates="constant" name="image"/>
+        <Param val="linear" valType="str" updates="constant" name="interpolate"/>
+        <Param val="" valType="str" updates="constant" name="mask"/>
+        <Param val="imageBreak" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0.1)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.4, 0.4)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="128" valType="num" updates="constant" name="texture resolution"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ImageComponent>
+      <TextComponent name="textBreak" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.045" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textBreak" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, -0.2)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Break! &amp;#10;Take the time you need and click on the button to continue when you are ready." valType="str" updates="constant" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+      <ButtonComponent name="buttonContinue_Break" plugin="None">
+        <Param val="bottom-center" valType="str" updates="constant" name="anchor"/>
+        <Param val="True" valType="bool" updates="constant" name="bold"/>
+        <Param val="None" valType="color" updates="constant" name="borderColor"/>
+        <Param val="0" valType="num" updates="constant" name="borderWidth"/>
+        <Param val="" valType="extendedCode" updates="constant" name="callback"/>
+        <Param val="-1.0000, -1.0000, -1.0000" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="fillColor"/>
+        <Param val="Arvo" valType="str" updates="constant" name="font"/>
+        <Param val="True" valType="bool" updates="constant" name="forceEndRoutine"/>
+        <Param val="False" valType="bool" updates="constant" name="italic"/>
+        <Param val="0.03" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="buttonContinue_Break" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="oncePerClick"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="" valType="num" updates="constant" name="padding"/>
+        <Param val="(0, -0.45)" valType="list" updates="constant" name="pos"/>
+        <Param val="last click" valType="str" updates="None" name="save"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.2, 0.06)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="1" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="Continue" valType="str" updates="constant" name="text"/>
+        <Param val="button onset" valType="str" updates="constant" name="timeRelativeTo"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+      </ButtonComponent>
+      <MouseComponent name="mouseBreak" plugin="None">
+        <Param val="buttonContinue_Break" valType="list" updates="constant" name="clickable"/>
+        <Param val="" valType="list" updates="constant" name="correctAns"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="correct click" valType="str" updates="constant" name="forceEndRoutineOnPress"/>
+        <Param val="mouseBreak" valType="code" updates="None" name="name"/>
+        <Param val="True" valType="bool" updates="constant" name="newClicksOnly"/>
+        <Param val="never" valType="str" updates="None" name="saveMouseState"/>
+        <Param val="name," valType="list" updates="constant" name="saveParamsClickable"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="constant" name="storeCorrect"/>
+        <Param val="False" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="routine" valType="str" updates="constant" name="timeRelativeTo"/>
+      </MouseComponent>
+    </Routine>
+    <Routine name="blackScreen">
+      <RoutineSettingsComponent name="blackScreen" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="blackScreen" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="0.7" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+      <CodeComponent name="codeInterTrial" plugin="None">
+        <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
+        <Param val="inter_trial_msg = ((&quot;Song &quot; + (trials.thisN + 1).toString()) + &quot;/200&quot;);&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
+        <Param val="inter_trial_msg = &quot;Song &quot;+str(trials.thisN+1)+&quot;/200&quot;" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="Auto-&gt;JS" valType="str" updates="None" name="Code Type"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
+        <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End JS Experiment"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End JS Routine"/>
+        <Param val="" valType="extendedCode" updates="constant" name="End Routine"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="codeInterTrial" valType="code" updates="None" name="name"/>
+      </CodeComponent>
+      <TextComponent name="textIntertrial" plugin="None">
+        <Param val="0.9608, 0.8431, 0.6863" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Arial" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.05" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="textIntertrial" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="0.7" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="$inter_trial_msg" valType="str" updates="set every repeat" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="code" updates="None" name="validator"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
+    </Routine>
+    <Routine name="blackScreen2">
+      <RoutineSettingsComponent name="blackScreen2" plugin="None">
+        <Param val="none" valType="str" updates="None" name="backgroundFit"/>
+        <Param val="" valType="str" updates="None" name="backgroundImg"/>
+        <Param val="$[0,0,0]" valType="color" updates="None" name="color"/>
+        <Param val="rgb" valType="str" updates="None" name="colorSpace"/>
+        <Param val="" valType="str" updates="constant" name="desc"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="blackScreen2" valType="code" updates="None" name="name"/>
+        <Param val="False" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="skip_break" valType="code" updates="constant" name="skipIf"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="0.7" valType="code" updates="constant" name="stopVal"/>
+        <Param val="False" valType="bool" updates="None" name="useWindowParams"/>
+      </RoutineSettingsComponent>
+    </Routine>
+  </Routines>
+  <Flow>
+    <Routine name="Welcome"/>
+    <Routine name="Instructions"/>
+    <LoopInitiator loopType="TrialHandler" name="trials">
+      <Param name="Selected rows" updates="None" val="" valType="str"/>
+      <Param name="conditions" updates="None" val="[OrderedDict([('audioFile', 'ogg/dark minimal techno_136_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_163_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_174_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_177_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_179_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_185_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_218_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_246_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_249_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_252_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_261_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_279_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_289_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_294_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_300_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_308_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_313_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_322_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_324_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_32_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_33_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_341_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_34_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_379_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_418_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_430_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_439_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_461_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_473_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_481_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_4_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_500_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_516_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_518_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_598_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_614_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_618_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_626_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_700_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_715_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_721_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_728_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_766_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_774_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_796_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_803_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_805_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_840_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_853_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dark minimal techno_94_pcm.ogg'), ('genre', 'minimal techno')]), OrderedDict([('audioFile', 'ogg/dubstep_145_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_14_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_191_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_209_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_215_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_222_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_246_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_292_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_297_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_315_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_31_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_321_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_328_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_344_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_357_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_368_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_376_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_393_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_472_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_48_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_499_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_530_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_553_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_563_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_592_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_626_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_631_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_640_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_658_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_686_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_699_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_728_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_755_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_757_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_797_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_799_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_7_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_804_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_808_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_832_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_886_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_895_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_903_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_912_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_926_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_941_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_95_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_960_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_974_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/dubstep_976_pcm.ogg'), ('genre', 'dubstep')]), OrderedDict([('audioFile', 'ogg/progressive house_1056_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_1061_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_107_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_1100_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_1137_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_128_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_13_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_172_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_176_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_198_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_209_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_223_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_257_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_289_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_296_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_298_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_315_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_359_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_35_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_366_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_386_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_414_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_425_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_440_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_443_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_451_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_559_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_570_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_601_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_64_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_65_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_665_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_768_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_76_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_822_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_826_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_861_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_870_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_883_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_891_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_899_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_904_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_907_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_908_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_927_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_946_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_954_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_97_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_981_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/progressive house_990_pcm.ogg'), ('genre', 'progressive house')]), OrderedDict([('audioFile', 'ogg/psytrance_1028_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1039_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1044_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1085_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1086_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_10_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1159_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1204_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1238_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1322_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1355_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1399_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_141_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1448_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1547_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1579_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_157_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_1597_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_219_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_221_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_273_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_274_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_279_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_344_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_350_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_363_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_371_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_396_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_404_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_425_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_444_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_496_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_504_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_606_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_619_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_648_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_661_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_67_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_680_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_789_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_808_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_854_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_874_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_881_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_884_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_941_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_945_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_974_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_985_pcm.ogg'), ('genre', 'psytrance')]), OrderedDict([('audioFile', 'ogg/psytrance_990_pcm.ogg'), ('genre', 'psytrance')])]" valType="str"/>
+      <Param name="conditionsFile" updates="None" val="audio_files_session2.csv" valType="file"/>
+      <Param name="endPoints" updates="None" val="[0, 1]" valType="num"/>
+      <Param name="isTrials" updates="None" val="True" valType="bool"/>
+      <Param name="loopType" updates="None" val="random" valType="str"/>
+      <Param name="nReps" updates="None" val="1" valType="num"/>
+      <Param name="name" updates="None" val="trials" valType="code"/>
+      <Param name="random seed" updates="None" val="" valType="code"/>
+    </LoopInitiator>
+    <Routine name="blackScreen"/>
+    <Routine name="Trial"/>
+    <Routine name="blackScreen2"/>
+    <Routine name="Break"/>
+    <LoopTerminator name="trials"/>
+    <Routine name="Goodbye"/>
+  </Flow>
+</PsychoPy2experiment>
