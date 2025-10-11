@@ -48,12 +48,8 @@ if args.select_features:
                         'spectral_flux_mean','danceability','chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
                         'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean','mfcc6_mean','mfcc7_mean',
                         'mfcc8_mean','mfcc9_mean','mfcc10_mean','mfcc11_mean','mfcc12_mean','mfcc13_mean','chord','chord_strength','chord_scale'
-                        ,'key','key_strength']
-    # disgard_features_2 = ['chroma1_mean','chroma2_mean','chroma3_mean','chroma4_mean','chroma5_mean','chroma6_mean',
-    #                       'chroma7_mean','chroma8_mean','chroma9_mean','chroma10_mean','chroma11_mean','chroma12_mean',
-    #                       'spectral_energy_mean','pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean',
-    #                       'pulse_clarity_mean','attack_slope_mean','spectral_flatness_mean','entropia_clarity','attack_time',
-    #                       'spectral_flux_mean','danceability']
+                        ,'key','key_strength','spectral_rms_mean', 'meter','entropia_clarity','entropia_clarity_low','entropia_clarity_high',
+                        'entropia_clarity_middle']
     features_to_keep_index = [index for index, feature in enumerate(feature_names) if feature not in disgard_features]
     features_to_keep = [feature for index, feature in enumerate(feature_names) if feature not in disgard_features]
 else:
