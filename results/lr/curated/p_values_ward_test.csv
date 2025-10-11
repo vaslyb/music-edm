@@ -1,0 +1,165 @@
+Feature,Class,P-value
+Loudness,Dark minimal techno,0.8846099741181178
+Dissonance,Dark minimal techno,0.43828779823992914
+Dynamic complexity,Dark minimal techno,0.8205338744048126
+Pitch salience,Dark minimal techno,0.9496224478548821
+Spectral centroid,Dark minimal techno,0.9137995063891928
+Spectral complexity,Dark minimal techno,0.8674491325211915
+Spectral decrease,Dark minimal techno,0.9063810426183866
+Spectral energyband high,Dark minimal techno,0.8380197886932828
+Spectral energyband low,Dark minimal techno,0.9712040402124436
+Spectral energyband middle,Dark minimal techno,0.9882418581335743
+Spectral entropy,Dark minimal techno,0.956998434807392
+Spectral kurtosis,Dark minimal techno,0.944635197864281
+Spectral rolloff,Dark minimal techno,0.9299174487380503
+Spectral skewness,Dark minimal techno,0.9528476526654673
+Spectral spread,Dark minimal techno,0.9316921653540556
+Zerocr,Dark minimal techno,0.8275372112960675
+Mfcc1,Dark minimal techno,0.9682415956406137
+Mfcc2,Dark minimal techno,0.9374904466074242
+Mfcc3,Dark minimal techno,0.835469133360321
+Mfcc4,Dark minimal techno,0.5420603597223111
+Mfcc5,Dark minimal techno,0.8802558690275218
+Onset rate,Dark minimal techno,0.8749693358192768
+Chords changes rate,Dark minimal techno,0.6747790990484079
+Chords number rate,Dark minimal techno,0.39396580659546143
+Key scale,Dark minimal techno,0.1553653508917638
+Pulse clarity low,Dark minimal techno,0.8876089590723203
+Pulse clarity middle,Dark minimal techno,0.7896648213551773
+Pulse clarity high,Dark minimal techno,0.7304589198109037
+Attack slope low,Dark minimal techno,0.9827655700279964
+Attack slope middle,Dark minimal techno,0.6324165037077867
+Attack slope high,Dark minimal techno,0.7236472931136184
+Spectral flatness low,Dark minimal techno,0.8334161352952634
+Spectral flatness middle,Dark minimal techno,0.9463970023101689
+Spectral flatness high,Dark minimal techno,0.8829419702901069
+Attack time low,Dark minimal techno,0.7090580799992905
+Attack time middle,Dark minimal techno,0.7529694098921977
+Attack time high,Dark minimal techno,0.9189138563725684
+Spectral flux low,Dark minimal techno,0.8241124693788414
+Spectral flux middle,Dark minimal techno,0.8721859221615622
+Spectral flux high,Dark minimal techno,0.9240213775136223
+Bpm,Dark minimal techno,0.8846904904196693
+Loudness,Psytrance,0.580806759840765
+Dissonance,Psytrance,0.8478610442434129
+Dynamic complexity,Psytrance,0.8591106034007385
+Pitch salience,Psytrance,0.8203387167006757
+Spectral centroid,Psytrance,0.9939703372427501
+Spectral complexity,Psytrance,0.9850275556917507
+Spectral decrease,Psytrance,0.9652617936530198
+Spectral energyband high,Psytrance,0.8935107948951007
+Spectral energyband low,Psytrance,0.9984592639482167
+Spectral energyband middle,Psytrance,0.9422386190470452
+Spectral entropy,Psytrance,0.9939074423827553
+Spectral kurtosis,Psytrance,0.9710013165053714
+Spectral rolloff,Psytrance,0.9979207111345326
+Spectral skewness,Psytrance,0.9674485349684265
+Spectral spread,Psytrance,0.9988016274824016
+Zerocr,Psytrance,0.9798114619900216
+Mfcc1,Psytrance,0.9936243186356667
+Mfcc2,Psytrance,0.9334056008953612
+Mfcc3,Psytrance,0.9761146253369833
+Mfcc4,Psytrance,0.9084268450471129
+Mfcc5,Psytrance,0.9922081556038674
+Onset rate,Psytrance,0.8765899694040542
+Chords changes rate,Psytrance,0.551484762499103
+Chords number rate,Psytrance,0.7755814524968495
+Key scale,Psytrance,0.7959543003575602
+Pulse clarity low,Psytrance,0.9036648388426263
+Pulse clarity middle,Psytrance,0.9420558551960649
+Pulse clarity high,Psytrance,0.6240032841617797
+Attack slope low,Psytrance,0.9562591029391239
+Attack slope middle,Psytrance,0.8740224586907623
+Attack slope high,Psytrance,0.9382834297462288
+Spectral flatness low,Psytrance,0.9757131081927785
+Spectral flatness middle,Psytrance,0.9857341746132305
+Spectral flatness high,Psytrance,0.9777898862871157
+Attack time low,Psytrance,0.8404889533234076
+Attack time middle,Psytrance,0.9757013249965076
+Attack time high,Psytrance,0.9432966969031457
+Spectral flux low,Psytrance,0.824667423006188
+Spectral flux middle,Psytrance,0.783757002405686
+Spectral flux high,Psytrance,0.970813319014562
+Bpm,Psytrance,0.9656675749040431
+Loudness,Progressive house,0.29720876986809575
+Dissonance,Progressive house,0.711034443268195
+Dynamic complexity,Progressive house,0.5963066002748534
+Pitch salience,Progressive house,0.8165367591776169
+Spectral centroid,Progressive house,0.9393768104561967
+Spectral complexity,Progressive house,0.8781441606840172
+Spectral decrease,Progressive house,0.7726808460544115
+Spectral energyband high,Progressive house,0.8846797935350673
+Spectral energyband low,Progressive house,0.9975180888157582
+Spectral energyband middle,Progressive house,0.9014172214716043
+Spectral entropy,Progressive house,0.9967588328841394
+Spectral kurtosis,Progressive house,0.8957788674390458
+Spectral rolloff,Progressive house,0.8745827853423107
+Spectral skewness,Progressive house,0.9338363002291934
+Spectral spread,Progressive house,0.9391380086227152
+Zerocr,Progressive house,0.752244036481556
+Mfcc1,Progressive house,0.9940437920135837
+Mfcc2,Progressive house,0.9494789801153771
+Mfcc3,Progressive house,0.9195715925981895
+Mfcc4,Progressive house,0.9703466528829204
+Mfcc5,Progressive house,0.7619265550647879
+Onset rate,Progressive house,0.6100417970803083
+Chords changes rate,Progressive house,0.7392266646417522
+Chords number rate,Progressive house,0.18357828750266103
+Key scale,Progressive house,0.7454063663861261
+Pulse clarity low,Progressive house,0.8433840306887306
+Pulse clarity middle,Progressive house,0.7435828303235734
+Pulse clarity high,Progressive house,0.7021260308454824
+Attack slope low,Progressive house,0.9914634555052327
+Attack slope middle,Progressive house,0.9728871403718505
+Attack slope high,Progressive house,0.9179005148798545
+Spectral flatness low,Progressive house,0.6911938316937709
+Spectral flatness middle,Progressive house,0.9710786898114667
+Spectral flatness high,Progressive house,0.8394969309896414
+Attack time low,Progressive house,0.8167670356614468
+Attack time middle,Progressive house,0.6617990607995183
+Attack time high,Progressive house,0.9587079785762288
+Spectral flux low,Progressive house,0.9965652769701229
+Spectral flux middle,Progressive house,0.7830356035030834
+Spectral flux high,Progressive house,0.8289252508246343
+Bpm,Progressive house,0.9120556013722096
+Loudness,Dubstep,0.9407264254530768
+Dissonance,Dubstep,0.9887345502147143
+Dynamic complexity,Dubstep,0.861396747106304
+Pitch salience,Dubstep,0.8743757832031143
+Spectral centroid,Dubstep,0.9749231351568782
+Spectral complexity,Dubstep,0.8440581800510991
+Spectral decrease,Dubstep,0.9606214576405661
+Spectral energyband high,Dubstep,0.9658047394902614
+Spectral energyband low,Dubstep,0.9946538230899514
+Spectral energyband middle,Dubstep,0.9901899261710987
+Spectral entropy,Dubstep,0.9949405165353687
+Spectral kurtosis,Dubstep,0.9905078679097419
+Spectral rolloff,Dubstep,0.9731504905788242
+Spectral skewness,Dubstep,0.9861512503051685
+Spectral spread,Dubstep,0.99752591943791
+Zerocr,Dubstep,0.957038698956787
+Mfcc1,Dubstep,0.9956251460656454
+Mfcc2,Dubstep,0.979010317549586
+Mfcc3,Dubstep,0.9823039508375738
+Mfcc4,Dubstep,0.9246822544947946
+Mfcc5,Dubstep,0.9420426326370336
+Onset rate,Dubstep,0.9814949752685158
+Chords changes rate,Dubstep,0.7084402923427896
+Chords number rate,Dubstep,0.9249298920744108
+Key scale,Dubstep,0.7676303307933768
+Pulse clarity low,Dubstep,0.9067167831545688
+Pulse clarity middle,Dubstep,0.8496791536983956
+Pulse clarity high,Dubstep,0.9734572506345355
+Attack slope low,Dubstep,0.966181438836233
+Attack slope middle,Dubstep,0.9322109808544603
+Attack slope high,Dubstep,0.9678546361811795
+Spectral flatness low,Dubstep,0.946455278265276
+Spectral flatness middle,Dubstep,0.919354501070795
+Spectral flatness high,Dubstep,0.9380591729228915
+Attack time low,Dubstep,0.9547153491255355
+Attack time middle,Dubstep,0.7511315337488315
+Attack time high,Dubstep,0.9315433700907442
+Spectral flux low,Dubstep,0.8238855929589612
+Spectral flux middle,Dubstep,0.8267743099563649
+Spectral flux high,Dubstep,0.9195529730074874
+Bpm,Dubstep,0.9510088758369625

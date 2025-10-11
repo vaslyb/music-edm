@@ -1,0 +1,11 @@
+Classification Report:
+                     precision    recall  f1-score   support
+
+Dark minimal techno       0.94      0.92      0.93        50
+          Psytrance       1.00      1.00      1.00        50
+  Progressive house       0.92      0.94      0.93        50
+            Dubstep       1.00      1.00      1.00        50
+
+           accuracy                           0.96       200
+          macro avg       0.97      0.96      0.96       200
+       weighted avg       0.97      0.96      0.96       200
