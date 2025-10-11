@@ -11,10 +11,12 @@ This repository contains code, datasets, and results for **Music Information Ret
 │   ├── curated/           # Curated subset of tracks used in experiments
 │   └── original/          # Full/original dataset of tracks
 │
-├── results/               # Results generated from analysis
-│   ├── all_tracks/        # Results on full dataset
-│   ├── curated_tracks/    # Results on curated dataset
-│   └── pca/               # Dimensionality reduction / PCA outputs
+results/                      # Results generated from analysis and experiments
+├── descriptive/              # Descriptive statistics
+├── dt/                       # Decision Tree 
+├── lda/                      # Linear Discriminant Analysis 
+├── lr/                       # Logistic Regression 
+└── pca/                      # Principal Component Analysis 
 │
 ├── src/                   # Source code
 │   ├── analysis/          # Scripts for statistical and MIR analysis
