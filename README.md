@@ -7,9 +7,9 @@ This repository contains code, datasets, and results for **Music Information Ret
 ## Repository Structure  
 
 ```
-├── dataset/               # Datasets used in the project
-│   ├── curated/           # Curated subset of tracks used in experiments
-│   └── original/          # Full/original dataset of tracks
+├── dataset/                  # Datasets used in the project
+│   ├── curated/              # Curated subset of tracks used in experiments
+│   └── original/             # Full/original dataset of tracks
 │
 results/                      # Results generated from analysis and experiments
 ├── descriptive/              # Descriptive statistics
@@ -18,11 +18,11 @@ results/                      # Results generated from analysis and experiments
 ├── lr/                       # Logistic Regression 
 └── pca/                      # Principal Component Analysis 
 │
-├── src/                   # Source code
-│   ├── analysis/          # Scripts for statistical and MIR analysis
-│   ├── data_collection/   # Tools and scripts for dataset building
-│   ├── expert_validation/ # Validation experiments with human experts
-│   └── feature_extraction/# MIR feature extraction scripts
+├── src/                      # Source code
+│   ├── analysis/             # Scripts for statistical and MIR analysis
+│   ├── data_collection/      # Tools and scripts for dataset building
+│   ├── expert_validation/    # Validation experiments with human experts
+│   └── feature_extraction/   # MIR feature extraction scripts
 ```
 
 ---
