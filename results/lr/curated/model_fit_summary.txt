@@ -1,0 +1,8 @@
+Overall Logistic Regression Model Fit
+====================================
+Log-Likelihood (Model): -22.520
+Log-Likelihood (Null): -277.259
+Likelihood Ratio χ²: 509.478
+df (Model): 41
+Model p-value: 3.879205833414133e-82
+McFadden pseudo-R²: 0.919
